@@ -5,14 +5,14 @@
 // Конструктор
 SomeClass::SomeClass()
 {
-    std::cout << "SomeClass::SomeClass()"<< std::endl;
+    std::cout << "SomeClass::SomeClass()" << std::endl;
 }
 
 // Конструктор копирования
 SomeClass::SomeClass(const SomeClass& copy) :
     SomeClass()
 {
-    std::cout << "SomeClass::SomeClass(const SomeClass& copy)"<< std::endl;
+    std::cout << "SomeClass::SomeClass(const SomeClass& copy)" << std::endl;
 }
 
 // Конструктор перемещения
