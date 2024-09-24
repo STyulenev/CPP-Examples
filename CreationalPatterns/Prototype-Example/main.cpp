@@ -2,29 +2,38 @@
 
 #include "PrototypeFactory.h"
 
-void client(PrototypeFactory& prototypeFactory)
+/*
+ * Порождающий паттерн Прототип (Prototype). Главная задача паттерна копировать по запросу уже созданный набор
+ * классов-прототипов (со своим набором данных).
+ */
+
+void test(PrototypeFactory* prototypeFactory)
 {
-    std::cout << "Let's create a Prototype 1\n";
+    {
+        std::cout << "Create ConcretePrototype1:" << std::endl;
 
-    AbstractPrototype* prototype = prototypeFactory.CreatePrototype(Type::PROTOTYPE_1);
-    prototype->method(90);
-    std::cout << "Adress " << prototype << "\n";
-    delete prototype;
+        AbstractPrototype* prototype1 = prototypeFactory->сreatePrototype(Type::PROTOTYPE_1);
+        prototype1->method(90);
+        std::cout << "Adress copy: " << prototype1 << std::endl;
+        delete prototype1;
+    }
 
-    std::cout << "Let's create a Prototype 2 \n";
+    {
+        std::cout << "Create ConcretePrototype2:" << std::endl;
 
-    prototype = prototypeFactory.CreatePrototype(Type::PROTOTYPE_2);
-    prototype->method(10);
-    std::cout << "Adress " << prototype << "\n";
+        AbstractPrototype* prototype2 = prototypeFactory->сreatePrototype(Type::PROTOTYPE_2);
+        prototype2->method(10);
+        std::cout << "Adress copy: " << prototype2 << std::endl;
 
-    delete prototype;
+        delete prototype2;
+    }
 }
 
 int main()
 {
     PrototypeFactory* prototypeFactory = new PrototypeFactory();
 
-    client(*prototypeFactory);
+    test(prototypeFactory);
 
     delete prototypeFactory;
 

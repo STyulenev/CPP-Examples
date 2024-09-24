@@ -22,5 +22,5 @@ void AbstractPrototype::method(float prototypeField)
 {
     this->prototypeField_ = prototypeField;
 
-    std::cout << "Call Method from " << prototypeName_ << " with field : " << prototypeField << std::endl;
+    std::cout << "Type: " << prototypeName_ << "data: " << prototypeField << std::endl;
 }

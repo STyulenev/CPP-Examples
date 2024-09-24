@@ -2,6 +2,9 @@
 
 #include "AbstractPrototype.h"
 
+/*
+ * Конкретный класс-прототип
+ */
 class ConcretePrototype1 : public AbstractPrototype
 {
 private:
@@ -12,5 +15,9 @@ public:
     ConcretePrototype1(std::string prototypeName, float concretePrototypeField);
     ~ConcretePrototype1();
 
+    /*
+     * Метод для копирования текущего экземпляра класса
+     */
     AbstractPrototype* clone() const override;
+
 };

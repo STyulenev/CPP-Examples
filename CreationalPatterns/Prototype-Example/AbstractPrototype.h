@@ -7,6 +7,9 @@ enum Type {
     PROTOTYPE_2
 };
 
+/*
+ * Абстрактный класс-прототип
+ */
 class AbstractPrototype
 {
 protected:
