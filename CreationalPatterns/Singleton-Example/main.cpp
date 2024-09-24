@@ -4,20 +4,13 @@
 #include "SimpleSingleton.h"
 #include "SafeSingleton.h"
 
-void testSimpleSingleton();
-void testSafeSingleton();
-
-int main()
-{
-    testSimpleSingleton();
-    testSafeSingleton();
-
-    return 0;
-}
+/*
+ * Порождающий паттерн Одиночка (простой и потокобесзопасный)
+ */
 
 void testSimpleSingleton()
 {
-    std::cout << "testSimpleSingleton()" << std::endl;
+    std::cout << "Test SimpleSingleton" << std::endl;
 
     std::cout << SimpleSingleton::instance()->getSomeData() << std::endl;
     SimpleSingleton::instance()->setSomeData(5);
@@ -26,7 +19,7 @@ void testSimpleSingleton()
 
 void testSafeSingleton()
 {
-    std::cout << "testSafeSingleton()" << std::endl;
+    std::cout << "Test SafeSingleton" << std::endl;
 
     std::thread thread1([]() -> void {
         std::cout << SafeSingleton::instance()->getSomeData() << std::endl;
@@ -41,4 +34,12 @@ void testSafeSingleton()
 
     thread1.join();
     thread2.join();
+}
+
+int main()
+{
+    testSimpleSingleton();
+    testSafeSingleton();
+
+    return 0;
 }

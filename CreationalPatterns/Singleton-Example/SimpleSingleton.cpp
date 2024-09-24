@@ -1,16 +1,18 @@
 #include "SimpleSingleton.h"
 
+#include <iostream>
+
 SimpleSingleton* SimpleSingleton::self = nullptr;
 
 SimpleSingleton::SimpleSingleton() :
-    someData(0)
+    m_someData(0)
 {
-    // ...
+    std::cout << "SimpleSingleton::SimpleSingleton()" << std::endl;
 }
 
 SimpleSingleton::~SimpleSingleton()
 {
-    // ...
+    std::cout << "SimpleSingleton::~SimpleSingleton()" << std::endl;
 }
 
 SimpleSingleton* SimpleSingleton::instance()
@@ -31,12 +33,12 @@ void SimpleSingleton::recreation()
 
 int SimpleSingleton::getSomeData()
 {
-    return someData;
+    return m_someData;
 }
 
 void SimpleSingleton::setSomeData(const int data)
 {
-    if (data != someData) {
-        someData = data;
+    if (data != m_someData) {
+        m_someData = data;
     }
 }

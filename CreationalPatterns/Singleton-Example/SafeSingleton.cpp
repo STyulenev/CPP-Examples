@@ -1,17 +1,19 @@
 #include "SafeSingleton.h"
 
+#include <iostream>
+
 SafeSingleton* SafeSingleton::self = nullptr;
 std::mutex SafeSingleton::mutex;
 
 SafeSingleton::SafeSingleton() :
-    someData(0)
+    m_someData(0)
 {
-    // ...
+    std::cout << "SafeSingleton::SafeSingleton()" << std::endl;
 }
 
 SafeSingleton::~SafeSingleton()
 {
-    // ...
+    std::cout << "SafeSingleton::~SafeSingleton()" << std::endl;
 }
 
 SafeSingleton* SafeSingleton::instance()
@@ -38,14 +40,14 @@ int SafeSingleton::getSomeData()
 {
     std::lock_guard<std::mutex> lock(mutex);
 
-    return someData;
+    return m_someData;
 }
 
 void SafeSingleton::setSomeData(const int data)
 {
     std::lock_guard<std::mutex> lock(mutex);
 
-    if (data != someData) {
-        someData = data;
+    if (data != m_someData) {
+        m_someData = data;
     }
 }
