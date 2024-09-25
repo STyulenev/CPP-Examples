@@ -2,12 +2,12 @@
 
 ConcreteBuilderX::ConcreteBuilderX()
 {
-
+    // ...
 }
 
 ConcreteBuilderX::~ConcreteBuilderX()
 {
-
+    // ...
 }
 
 void ConcreteBuilderX::buildPartA()

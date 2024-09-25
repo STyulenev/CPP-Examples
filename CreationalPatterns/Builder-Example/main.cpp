@@ -12,13 +12,13 @@ int main()
     director.construct();
 
     Product product1 = director.get();
-    std::cout << "1st product parts: " << product1.get() << std::endl;
+    std::cout << "First product: " << product1.get() << std::endl;
 
     director.set(new ConcreteBuilderY());
     director.construct();
 
     Product product2 = director.get();
-    std::cout << "2nd product parts: " << product2.get() << std::endl;
+    std::cout << "Second product: " << product2.get() << std::endl;
 
     return 0;
 }

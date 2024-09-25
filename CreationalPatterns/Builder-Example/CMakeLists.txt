@@ -13,8 +13,10 @@ set(PROJECT_SOURCE
 
     AbstractBuilder.h
 
-    ConcreteBuilderX.h ConcreteBuilderX.cpp
-    ConcreteBuilderY.h ConcreteBuilderY.cpp
+    ConcreteBuilderX.h
+    ConcreteBuilderX.cpp
+    ConcreteBuilderY.h
+    ConcreteBuilderY.cpp
 
     Director.h
     Director.cpp

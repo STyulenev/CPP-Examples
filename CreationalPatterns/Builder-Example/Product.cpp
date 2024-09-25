@@ -2,12 +2,12 @@
 
 Product::Product()
 {
-
+    // ...
 }
 
 Product::~Product()
 {
-
+    // ...
 }
 
 void Product::makeA(const std::string &part)
