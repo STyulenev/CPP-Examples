@@ -1,6 +1,16 @@
 #include "Adaptee.h"
 
-std::string Adaptee::specificRequest() const
+Adaptee::Adaptee()
 {
-    return "Specific data";
+    // ...
+}
+
+Adaptee::~Adaptee()
+{
+    // ...
+}
+
+std::string Adaptee::specialAction() const
+{
+    return "Adaptee::specialAction()";
 }

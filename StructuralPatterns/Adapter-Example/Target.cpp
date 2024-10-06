@@ -2,15 +2,15 @@
 
 Target::Target()
 {
-
+    // ...
 }
 
 Target::~Target()
 {
-
+    // ...
 }
 
-std::string Target::request() const
+std::string Target::someAction() const
 {
-    return "default data";
+    return "Target::someAction()";
 }

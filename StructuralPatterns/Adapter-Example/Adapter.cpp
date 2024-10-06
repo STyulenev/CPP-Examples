@@ -1,36 +1,38 @@
 #include "Adapter.h"
 
+#if (MULTIPLE_INHERITANCE)
+
 Adapter::Adapter(Adaptee* adaptee) :
     adaptee_(adaptee)
 {
-
+    // ...
 }
 
 Adapter::~Adapter()
 {
-
+    // ...
 }
 
-std::string Adapter::request() const
+std::string Adapter::someAction() const
 {
-    std::string data = this->adaptee_->specificRequest();
-
-    return data + " with processing";
+    return this->adaptee_->specialAction() + " + with processing + " + Target::someAction();
 }
 
-/*Adapter::Adapter()
-{
+#else
 
+Adapter::Adapter()
+{
+    // ...
 }
 
 Adapter::~Adapter()
 {
-
+    // ...
 }
 
-std::string Adapter::request() const
+std::string Adapter::someAction() const
 {
-    std::string data = this->adaptee_->specificRequest();
+    return Adaptee::specialAction() + " + with processing + " + Target::someAction();
+}
 
-    return data + " with processing";
-}*/
+#endif

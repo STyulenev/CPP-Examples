@@ -2,12 +2,15 @@
 
 #include <string>
 
+/*
+ * Целевой класс с некоторой логикой
+ */
 class Target
 {
 public:
     Target();
     virtual ~Target();
 
-    virtual std::string request() const;
+    virtual std::string someAction() const;
 
 };
