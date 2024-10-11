@@ -53,7 +53,5 @@ int main()
 
     std::cout << std::endl;
 
-    // Утечка
-
     return 0;
 }

@@ -26,11 +26,19 @@ int main()
     list.push_back(SomeClass(4));
     list.push_back(SomeClass(5));
 
-    auto element = list.at(0);
-    std::cout << "list[0] = " << ((element != nullptr) ? element->data.getData() : 0) << std::endl;
+    {
+        auto element = list.at(0);
+        std::cout << "list.at(0) = " << ((element != nullptr) ? element->data.getData() : 0) << std::endl;
+    }
+
+    {
+        auto element = list[0];
+        std::cout << "list[0] = " << ((element != nullptr) ? element->data.getData() : 0) << std::endl;
+    }
 
     list.erase(1);
     list.insert(0, SomeClass(5));
+    list.pop_front();
 
     for (auto node = list.head; node != nullptr; node = node->next) {
         std::cout << node->data.getData() << " ";

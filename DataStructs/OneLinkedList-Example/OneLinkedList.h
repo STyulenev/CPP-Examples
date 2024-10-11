@@ -1,5 +1,7 @@
 #pragma once
 
+#include <stdexcept>
+
 /*
  * Класс-обёртка Node представляет собой единичный элемент односвязного списка,
  * содержит данные и указатель на следующий элемент.
@@ -8,8 +10,8 @@ template<typename Type>
 class Node
 {
 public:
-    Type data;
-    Node* next;
+    Type data;  // Данные
+    Node* next; // Указатель на следующий элемент
 
 public:
     Node(Type data) {
@@ -132,9 +134,9 @@ public:
     Node<Type>* at(int index) {
         // Индекс не может быть отрицательным
         if (index < 0)
-            return nullptr; // или throw std::out_of_range
+            throw std::out_of_range("out from OneLinkedList");
 
-        // Поиск поэлементный
+        // Поиск поэлементный, пока не дойдём до tail
         Node<Type>* node = head;
         int _index = 0;
         while (node && _index != index && node->next) {
@@ -142,8 +144,18 @@ public:
             _index++;
         }
 
-        // Если нашли элемент (_index == index), то возвращаем его, иначе nullptr
-        return (_index == index) ? node : nullptr; // или throw std::out_of_range
+        // Если нашли элемент (_index == index), то возвращаем его
+        if (_index == index)
+            return node;
+        else
+            throw std::out_of_range("out from OneLinkedList"); // иначе выход за пределы
+    }
+
+    /*
+     * Получить элемент по индексу через оператор []
+     */
+    Node<Type>* operator[](int index) {
+        return at(index);
     }
 
     /*
@@ -175,7 +187,7 @@ public:
     void erase(int index) {
         // Индекс не может быть отрицательным
         if (index < 0)
-            return; // или throw std::out_of_range
+            throw std::out_of_range("out from OneLinkedList");
 
         // Если индекс равен нулю, то вставляем первым элементом
         if (index == 0) {
@@ -190,7 +202,7 @@ public:
 
         // Проверка на выход за пределы списка
         if (node == nullptr)
-            return; // или throw std::out_of_range
+            throw std::out_of_range("out from OneLinkedList");
 
         // Устанавливаем указатель на следующий элемент после удаляемого
         Node<Type>* right = node->next;
