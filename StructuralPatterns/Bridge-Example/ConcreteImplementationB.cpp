@@ -1,6 +1,16 @@
 #include "ConcreteImplementationB.h"
 
-std::string ConcreteImplementationB::operationImplementation() const
+ConcreteImplementationB::ConcreteImplementationB()
 {
-    return "ConcreteImplementationB: Here's the result on the platform B.";
+    // ...
+}
+
+ConcreteImplementationB::~ConcreteImplementationB()
+{
+    // ...
+}
+
+std::string ConcreteImplementationB::someOperation() const
+{
+    return "ConcreteImplementationB ...";
 }

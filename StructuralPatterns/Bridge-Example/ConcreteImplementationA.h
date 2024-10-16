@@ -2,9 +2,15 @@
 
 #include "Implementation.h"
 
+/*
+ * Конкретный класс из иерархии реализации
+ */
 class ConcreteImplementationA : public Implementation
 {
 public:
-    std::string operationImplementation() const override;
+    ConcreteImplementationA();
+    ~ConcreteImplementationA();
+
+    std::string someOperation() const override;
 
 };

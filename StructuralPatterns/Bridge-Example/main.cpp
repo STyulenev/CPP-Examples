@@ -4,18 +4,24 @@
 #include "ConcreteImplementationB.h"
 #include "ExtendedAbstraction.h"
 
-void clientCode(const Abstraction& abstraction)
-{
-    // ...
-    std::cout << abstraction.operation() << std::endl;
-    // ...
-}
+/*
+ * Мост – это структурный паттерн проектирования, который разделяет один или несколько классов на две
+ * отдельные иерархии – абстракцию и реализацию (т.е. управляющие классы и классы с логикой),
+ * позволяя изменять их независимо друг от друга.
+ *
+ *                               Implementation
+ * Abstraction                   ConcreteImplementationA
+ * ExtendedAbstraction   <===>   ConcreteImplementationB
+ * ...                           ...
+ *
+ */
 
 int main()
 {
     Implementation* implementation = new ConcreteImplementationA();
     Abstraction* abstraction = new Abstraction(implementation);
-    clientCode(*abstraction);
+
+    std::cout << abstraction->operation() << std::endl;
 
     delete implementation;
     delete abstraction;
@@ -24,7 +30,8 @@ int main()
 
     implementation = new ConcreteImplementationB();
     abstraction = new ExtendedAbstraction(implementation);
-    clientCode(*abstraction);
+
+    std::cout << abstraction->operation() << std::endl;
 
     delete implementation;
     delete abstraction;

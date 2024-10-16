@@ -13,5 +13,5 @@ Abstraction::~Abstraction()
 
 std::string Abstraction::operation() const
 {
-    return "Abstraction: Base operation with: " + this->implementation_->operationImplementation();
+    return "Abstraction ... + " + this->implementation_->someOperation();
 }

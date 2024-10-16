@@ -3,10 +3,15 @@
 ExtendedAbstraction::ExtendedAbstraction(Implementation* implementation) :
     Abstraction(implementation)
 {
+    // ...
+}
 
+ExtendedAbstraction::~ExtendedAbstraction()
+{
+    // ...
 }
 
 std::string ExtendedAbstraction::operation() const
 {
-    return "ExtendedAbstraction: Extended operation with: " + this->implementation_->operationImplementation();
+    return Abstraction::operation() + " + ExtendedAbstraction ... + " + this->implementation_->someOperation();
 }
