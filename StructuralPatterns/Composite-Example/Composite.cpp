@@ -1,5 +1,15 @@
 #include "Composite.h"
 
+Composite::Composite()
+{
+    // ...
+}
+
+Composite::~Composite()
+{
+    // ...
+}
+
 void Composite::add(Component* component)
 {
     this->children_.push_back(component);
@@ -12,7 +22,7 @@ void Composite::remove(Component* component)
     component->setParent(nullptr);
 }
 
-bool Composite::IsComposite() const
+bool Composite::isComposite() const
 {
     return true;
 }

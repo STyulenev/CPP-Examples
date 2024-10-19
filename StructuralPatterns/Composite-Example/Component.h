@@ -2,8 +2,8 @@
 
 #include <string>
 
-/*!
- * \brief Базовый класс-компонент
+/*
+ * Базовый класс-компонент для создания элемента дерева компонентов.
  */
 class Component
 {
@@ -14,20 +14,34 @@ public:
     Component();
     virtual ~Component();
 
+    /*
+     * Метод для установления родителя
+     */
     void setParent(Component* parent);
+
+    /*
+     * Метод для получения указателя на родителя
+     */
     Component* getParent() const;
 
+    /*
+     * Метод для добавления нового листа/ветки
+     */
     virtual void add(Component* component);
+
+    /*
+     * Метод для удаления листа/ветки
+     */
     virtual void remove(Component* component);
 
-    /*!
-   * \brief Метод проверяет компонент на вложенность
-   */
-    virtual bool IsComposite() const;
+    /*
+     * Метод проверяет компонент на вложенность
+     */
+    virtual bool isComposite() const;
 
-    /*!
-   * \brief Метод для полезных действий
-   */
+    /*
+     * Метод для полезных действий
+     */
     virtual std::string someAction() const = 0;
 
 };

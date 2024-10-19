@@ -3,35 +3,36 @@
 #include "Composite.h"
 #include "Leaf.h"
 
-void clientCode(Component* component)
-{
-    // ...
-    std::cout << "RESULT: " << component->someAction() << std::endl;
-    // ...
-}
+/*
+ * Компоновщик – это структурный паттерн, который позволяет создавать дерево объектов и работать с ним так же,
+ * как и с единичным объектом.
+ */
 
 int main()
 {
     Component* simple = new Leaf();
-    std::cout << "Simple component:" << std::endl;
-    clientCode(simple);
 
-    std::cout << std::endl;
+    // Пример вывода одиночного листа
+    std::cout << "RESULT: " << simple->someAction() << std::endl;
 
     Component* tree = new Composite();
     Component* branch1 = new Composite();
-
     Component* leaf_1 = new Leaf();
     Component* leaf_2 = new Leaf();
     Component* leaf_3 = new Leaf();
+
     branch1->add(leaf_1);
     branch1->add(leaf_2);
+
     Component* branch2 = new Composite();
+
     branch2->add(leaf_3);
+
     tree->add(branch1);
     tree->add(branch2);
-    std::cout << "Client: Now I've got a composite tree:" << std::endl;
-    clientCode(tree);
+
+    // Пример вывода дерева
+    std::cout << "RESULT: " << tree->someAction() << std::endl;
 
     delete simple;
     delete tree;

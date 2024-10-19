@@ -2,12 +2,12 @@
 
 Component::Component()
 {
-
+    // ...
 }
 
 Component::~Component()
 {
-
+    // ...
 }
 
 void Component::setParent(Component* parent)
@@ -30,7 +30,7 @@ void Component::remove(Component* component)
 
 }
 
-bool Component::IsComposite() const
+bool Component::isComposite() const
 {
     return false;
 }
