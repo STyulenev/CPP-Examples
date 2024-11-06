@@ -14,15 +14,16 @@ set(PROJECT_SOURCES
     #deque.cpp
 
     # ========== Associative ==========
-
     #set.cpp
     #map.cpp
     #multi_set.cpp
     #multi_map.cpp
 
     # ========== Unordered associative ==========
-    #unordered_set...
-    #unordered_map...
+    #unordered_set.cpp
+    #unordered_map.cpp
+    #unordered_multiset...
+    #unordered_multimap...
 
     # ========== Adaptors ==========
     #stack...
