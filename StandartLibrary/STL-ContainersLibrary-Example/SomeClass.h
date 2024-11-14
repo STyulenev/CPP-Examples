@@ -48,7 +48,7 @@ struct is_pointer<T*> { static const bool value = true; };
 template<class MapType>
 struct is_map_type : std::is_same<typename MapType::value_type, std::pair<const typename MapType::key_type, typename MapType::mapped_type>> {};
 
-template <typename Type, typename = is_container<Type>>
+template <typename Type, std::enable_if_t<is_container<Type>::value, bool> = true>
 void printContainer(const Type& container)
 {
     std::cout << "Print: ";
@@ -65,7 +65,7 @@ void printContainer(const Type& container)
     std::cout << std::endl;
 }
 
-template <typename Type, typename = is_map_type<Type>>
+template <typename Type, std::enable_if_t<is_map_type<Type>::value, bool> = true>
 void printMap(const Type& map)
 {
     std::cout << "Print: ";
