@@ -4,6 +4,12 @@
 #include <type_traits>
 #include <iostream>
 
+#include <vector>
+#include <list>
+
+#include <map>
+#include <set>
+
 /*
  * =======================================================================================================================================================================
  *                                                                           Other
@@ -31,6 +37,7 @@ public:
     }
 };
 
+// Запись до C++11
 template<class T>
 struct CheckMethod {
     typedef void(T::*P)(void);
@@ -109,6 +116,7 @@ struct Base2 {
     void print() {} // public
 };
 
+// Запись с C++11
 template <typename T, typename ENABLE = void>
 struct CheckMethod : std::false_type { /*static const bool value = false;*/ };
 
@@ -263,5 +271,140 @@ void test()
 } // E5
 
 
+
+namespace E6 { // ------------------------------------ Проверка на std контейнер (std, boost, qt ...)
+
+template<typename T, typename = void>
+struct is_container : std::false_type
+{};
+
+template<typename T>
+struct is_container<T, std::void_t<
+        typename T::value_type,
+        typename T::size_type,
+        typename T::allocator_type,
+        typename T::iterator,
+        typename T::const_iterator,
+        decltype(std::declval<T>().size()),
+decltype(std::declval<T>().begin()),
+decltype(std::declval<T>().end()),
+decltype(std::declval<T>().cbegin()),
+decltype(std::declval<T>().cend())>> : std::true_type
+{};
+
+template <typename T, std::enable_if_t<is_container<T>::value, bool> = true>
+void foo(T arg)
+{}
+
+void test()
+{
+    std::vector<int> v = {1, 2, 3};
+    std::list<int> l = {1, 2, 3};
+    std::map<int, int> m = { {1, 2}, {2, 3} };
+    std::set<int> s = {1, 2, 3};
+
+    //foo(12);             // Ошибка
+    //foo(12L);            // Ошибка
+    foo(v);                // Ок
+    foo(l);                // Ок
+    foo(std::string("s")); // Ок
+    foo(m);                // Ок
+    foo(s);                // Ок
+}
+
+} // E6
+
+
+
+namespace E7 { // ------------------------------------ Проверка на карту (std, boost, qt ...)
+
+template<class T>
+struct is_map : std::is_same<typename T::value_type, std::pair<const typename T::key_type, typename T::mapped_type>> {};
+
+template <typename T, typename = typename std::enable_if_t<is_map<T>::value, bool> >
+void foo(T arg)
+{}
+
+void test()
+{
+    std::vector<int> v = {1, 2, 3};
+    std::list<int> l = {1, 2, 3};
+    std::map<int, int> m = { {1, 2}, {2, 3} };
+    std::set<int> s = {1, 2, 3};
+
+    //foo(12);               // Ошибка
+    //foo(12L);              // Ошибка
+    //foo(v);                // Ошибка
+    //foo(l);                // Ошибка
+    //foo(std::string("s")); // Ошибка
+    foo(m);                  // Ок
+    //foo(s);                // Ошибка
+}
+
+} // E7
+
+
+
+namespace E8 { // ------------------------------------ Проверка в возвращаемом типе (на примере арифметического типа)
+
+template <class T>
+typename std::enable_if_t<std::is_arithmetic_v<T>, T>
+foo(T t)
+{
+    std::cout << "foo<arithmetic T>\n";
+    return t;
+}
+
+enum E {
+    FIRST = 0
+};
+
+void test()
+{
+    foo(12);                 // Ок
+    foo(12L);                // Ок
+    foo('c');                // Ок
+    //foo(E::FIRST);         // Ошибка
+    //foo(std::string("s")); // Ошибка
+}
+
+} // E8
+
+
+
+namespace E9 { // ------------------------------------ Пример концепта, но с другой записью
+
+#if __cplusplus >= 202002L // 202003L
+
+template <class T>
+concept UnignedIntegral = std::is_integral_v<T> && std::is_unsigned_v<T>;
+
+template <UnignedIntegral T>
+void foo(T val)
+{}
+
+#else
+
+template <typename T>
+void foo(T)
+{
+    std::cout << "Unknown standart" << std::endl;
+}
+
+#endif
+
+void test()
+{
+    unsigned int i = 12;
+    unsigned long l = 12;
+
+    //foo(-12);  // Ошибка
+    //foo(12L);  // Ошибка
+    //foo('c');  // Ошибка
+    foo(i);      // Ок
+    foo(l);      // Ок
+}
+
+} // E9
 
 } // namespace Other

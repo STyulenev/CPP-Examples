@@ -6,16 +6,21 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(PROJECT_SOURCES
-
-
     main.cpp
 
-    # ========== Type traits ==========
+    # ========== Type traits
     Example1.h
     Example2.h
     Example3.h
 
-    # =========== Other ===============
+    Example6.h
+    Example7.h
+    Example8.h
+
+    # ========== Compile-time rational arithmetic
+
+
+    # =========== Other
     Other.h
 )
 
