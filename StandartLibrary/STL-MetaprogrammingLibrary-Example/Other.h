@@ -407,4 +407,32 @@ void test()
 
 } // E9
 
+
+
+namespace E10 { // ------------------------------------ Пример типизированного шаблона с частными случаями
+
+template <int N>
+struct Base {
+    static const int value = N * N;
+};
+
+template <>
+struct Base<0> {
+    static const int value = 0;
+};
+
+template <>
+struct Base<1> {
+    static const int value = 1;
+};
+
+void test()
+{
+    std::cout << "value = " << Base<10>::value << std::endl;
+    std::cout << "value = " << Base<0>::value << std::endl;
+    std::cout << "value = " << Base<1>::value << std::endl;
+}
+
+} // E10
+
 } // namespace Other

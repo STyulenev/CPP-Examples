@@ -177,7 +177,7 @@ void test()
 
 
 
-namespace TP10 { // ------------------------------------ Проверка на пустой класс/структуру (is_empty)
+namespace TP10 { // ------------------------------------ Проверка на полиморфный класс/структуру (is_polymorphic)
 
 // Полиморфный класс/структура - это класс/структура, не являющийся объединением, который объявляет или наследует по крайней мере одну виртуальную функцию.
 
@@ -209,41 +209,147 @@ void test()
     foo(b3);   // Ок
 }
 
-} // TP9
+} // TP10
+
+
+
+namespace TP11 { // ------------------------------------ Проверка на абстрактный класс/структуру (is_abstract)
+
+struct AbstractBase
+{
+    virtual ~AbstractBase() = default;
+
+    virtual void print() = 0;
+};
+
+struct Base : public AbstractBase {
+    virtual void print() override {};
+};
+
+struct NonAbstractBase {
+    void print() {}
+};
+
+template <typename T, std::enable_if_t<std::is_abstract<T>::value, bool> = true>
+void foo(T* arg)
+{}
+
+void test()
+{
+    AbstractBase* b1 = new Base();
+    Base* b2 = new Base();
+    NonAbstractBase* b3 = new NonAbstractBase();
+
+    foo(b1);   // Ок
+    //foo(b2); // Ошибка
+    //foo(b3); // Ошибка
+
+    delete b1;
+    delete b2;
+    delete b3;
+}
+
+} // TP11
+
+
+
+
+namespace TP12 { // ------------------------------------ Проверка на агрегатный класс/структуру (is_aggregate)
+
+// Агрегатный класс в C++ — это класс, который является просто набором публичных элементов (полей и методов).
+// Если есть private/protected/virtual методы/поля, наследование и т.д., то это уже не агрегатный класс.
+
+struct AbstractBase
+{
+    virtual ~AbstractBase() = default;
+
+    virtual void print() = 0;
+};
+
+struct Base final : public AbstractBase {
+    virtual void print() override {};
+};
+
+struct AggregateBase {
+    int a;
+    int b;
+    int c;
+
+    void print() {}
+};
+
+struct NonAggregateBase {
+    void print() {}
+
+private:
+    int b;
+};
+
+template <typename T, std::enable_if_t<std::is_aggregate<T>::value, bool> = true>
+void foo(T* arg)
+{}
+
+void test()
+{
+    AbstractBase* b1 = new Base();
+    Base* b2 = new Base();
+    AggregateBase* b3 = new AggregateBase();
+    NonAggregateBase* b4 = new NonAggregateBase();
+
+    //foo(b1); // Ошибка
+    //foo(b2); // Ошибка
+    foo(b3);   // Ок
+    //foo(b4); // Ошибка
+
+    delete b1;
+    delete b2;
+    delete b3;
+}
+
+} // TP12
+
+
+
+namespace TP13 { // ------------------------------------ Проверка на класс/структуру с неявным временем жизни (is_implicit_lifetime)
+
+// Агрегатный класс в C++ — это класс, который является просто набором публичных элементов (полей и методов).
+// Если есть private/protected/virtual методы/поля, наследование и т.д., то это уже не агрегатный класс.
+
+#if __cplusplus >= 202302L // 202003L
+
+struct Base1
+{
+    ~Base() = delete;
+};
+
+struct Base2
+{
+    ~Base() = default;
+};
+
+template <typename T, std::enable_if_t<std::is_implicit_lifetime<T>::value, bool> = true>
+void foo(T& arg)
+{}
+
+void test()
+{
+
+    Base1 b1;
+    Base2 b2;
+
+    foo(b1);   // Ок
+    //foo(b2); // Ошибка
+}
+
+#else
+
+void test()
+{
+    std::cout << "Unknown standart" << std::endl;
+}
+
+#endif
+
+} // TP13
 
 } // namespace Example3
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

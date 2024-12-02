@@ -3,6 +3,7 @@
 #include "Example1.h"
 #include "Example2.h"
 #include "Example3.h"
+#include "Example4.h"
 #include "Example6.h"
 #include "Example7.h"
 #include "Example8.h"
@@ -29,14 +30,23 @@ int main()
 //        Example2::CTP6::test();
 //    }
 
-//    // Type properties
-//    {
-//        Example3::TP1::test();
-//        Example3::TP2::test();
-//        Example3::TP3::test();
-//        Example3::TP5::test();
-//        Example3::TP9::test();
-//    }
+    // Type properties
+    {
+        Example3::TP1::test();
+        Example3::TP2::test();
+        Example3::TP3::test();
+        Example3::TP5::test();
+        Example3::TP9::test();
+        Example3::TP10::test();
+        Example3::TP11::test();
+        Example3::TP12::test();
+        Example3::TP13::test();
+    }
+
+    // Supported operations
+    {
+        Example4::SO1::test();
+    }
 
 //    // Type relationships
 //    {
@@ -68,6 +78,7 @@ int main()
         Other::E7::test();
         Other::E8::test();
         Other::E9::test();
+        Other::E10::test();
     }
 
     return 0;
