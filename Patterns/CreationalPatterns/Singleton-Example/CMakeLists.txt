@@ -8,6 +8,9 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(PROJECT_SOURCE
     main.cpp
 
+    LazySingleton.h
+    LazySingleton.cpp
+
     SafeSingleton.h
     SafeSingleton.cpp
 

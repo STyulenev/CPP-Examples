@@ -2,7 +2,11 @@
 
 #include <iostream>
 
-SimpleSingleton* SimpleSingleton::self = nullptr;
+#if IS_POINTER
+    SimpleSingleton* SimpleSingleton::self = nullptr;
+#else
+    SimpleSingleton SimpleSingleton::self;
+#endif
 
 SimpleSingleton::SimpleSingleton() :
     m_someData(0)
@@ -15,6 +19,7 @@ SimpleSingleton::~SimpleSingleton()
     std::cout << "SimpleSingleton::~SimpleSingleton()" << std::endl;
 }
 
+#if IS_POINTER
 SimpleSingleton* SimpleSingleton::instance()
 {
     if (!self) {
@@ -23,13 +28,21 @@ SimpleSingleton* SimpleSingleton::instance()
 
     return self;
 }
+#else
+SimpleSingleton& SimpleSingleton::instance()
+{
+    return self;
+}
+#endif
 
+#if IS_POINTER
 void SimpleSingleton::recreation()
 {
     if (self) {
         delete self;
     }
 }
+#endif
 
 int SimpleSingleton::getSomeData()
 {
