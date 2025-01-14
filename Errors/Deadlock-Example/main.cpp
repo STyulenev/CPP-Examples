@@ -13,7 +13,8 @@ int main()
 {
     SomeClass someClass;
 
-    someClass.run(); // Метод с deadlock
+    someClass.run1();   // Взаимная блокировка двух мьютексов
+    //someClass.run2(); // Повторная блокировка одного мьютекса
 
     return 0; // Недостижимая точка
 }

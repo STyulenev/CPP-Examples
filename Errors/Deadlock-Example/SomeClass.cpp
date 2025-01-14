@@ -6,16 +6,18 @@
 
 SomeClass::SomeClass()
 {
-    std::cout << "SomeClass::SomeClass()" << std::endl;
+    std::cout << __PRETTY_FUNCTION__ << std::endl;
 }
 
 SomeClass::~SomeClass()
 {
-    std::cout << "SomeClass::~SomeClass()" << std::endl;
+    std::cout << __PRETTY_FUNCTION__ << std::endl;
 }
 
-void SomeClass::run()
+void SomeClass::run1()
 {
+    std::cout << "Example: "<< __FUNCTION__ << std::endl;
+
     std::mutex mutex1;
     std::mutex mutex2;
 
@@ -41,4 +43,27 @@ void SomeClass::run()
 
     thread1.join();
     thread2.join();
+}
+
+void SomeClass::run2()
+{
+    std::cout << "Example: "<< __FUNCTION__ << std::endl;
+
+    std::mutex mutex;
+    std::mutex mutex2;
+
+    std::thread thread([&mutex, &mutex2] {
+        std::cout << "Thread. Begining." << std::endl;
+
+        mutex.lock(); // Блокировка мьютекса
+
+        // ...
+        // mutex.try_lock(); - пропустили для примера
+
+        mutex.lock(); // Повторная блокировка уже заблокированного мьютекса. Deadlock.
+
+        std::cout << "Thread. Ending." << std::endl; // Недостижимая точка
+    });
+
+    thread.join();
 }
