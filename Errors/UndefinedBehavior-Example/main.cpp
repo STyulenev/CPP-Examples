@@ -1,3 +1,4 @@
+#include <climits>
 #include <iostream>
 
 // clang-format off
@@ -57,13 +58,25 @@ void example_2()
 
     std::cout << __FUNCTION__ << ": someStruct->i = " << someStruct->i << std::endl; // undefined behaviour
     std::cout << __FUNCTION__ << ": someStruct->j = " << someStruct->j << std::endl; // undefined behaviour
+}
 
+/*
+ * Доступ к памяти за пределами границ массива.
+ */
+void example_3()
+{
+    std::cout << std::endl;
+
+    int array[4] = { 0, 1, 2, 3 };
+
+    std::cout << __FUNCTION__ << ": arr[10] = " << array[10] << std::endl;
 }
 
 int main()
 {
     example_1();
     example_2();
+    example_3();
 
     return 0;
 }
