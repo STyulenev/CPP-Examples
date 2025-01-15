@@ -1,6 +1,5 @@
 #pragma once
 
-#include <functional>
 #include <type_traits>
 #include <iostream>
 
@@ -19,6 +18,35 @@
  */
 
 namespace Example2 {
+
+
+namespace CTP1 { // ------------------------------------ Проверка на фундаментальный тип (is_fundamental)
+
+template <typename T, std::enable_if_t<std::is_fundamental<T>::value, bool> = true >
+void foo(T arg)
+{}
+
+/*
+ * Фундаментальные типы:
+ * - arithmetic type (integral, float);
+ * - void;
+ * - nullptr_t.
+ */
+void test()
+{
+    std::nullptr_t n_ptr;
+    int* i = new int(5);
+
+    foo(n_ptr); // Ок std::nullptr_t
+    //foo(i);   // Ошибка int*
+    foo(*i);    // Ок int
+
+    delete i;
+}
+
+} // CTP1
+
+
 
 namespace CTP2 { // ------------------------------------ Проверка на арифметический тип (целочисленный или с плавающей точкой) (is_arithmetic)
 
@@ -39,7 +67,113 @@ void test()
     //foo("sdf"); // Ошибка
 }
 
-} // CTP1
+} // CTP2
+
+
+namespace CTP3 { // ------------------------------------ Проверка на скалярный тип (is_scalar)
+
+enum Enum {
+    FIRST = 1,
+    SECOND = 2
+};
+
+struct Base {};
+
+template <typename T, std::enable_if_t<std::is_scalar<T>::value, bool> = true >
+void foo(T arg)
+{}
+
+/*
+ * Скалярные типы:
+ * - arithmetic (integral, float);
+ * - pointers;
+ * - enum;
+ * - pointer-to-member;
+ * - nullptr_t.
+ */
+void test()
+{
+    std::nullptr_t n_ptr;
+    int* i = new int(5);
+    Base b;
+
+    foo(n_ptr);       // Ок std::nullptr_t
+    foo(i);           // Ок int*
+    foo(*i);          // Ок int
+    foo(Enum::FIRST); // Ок enum
+    //foo(b);         // Ошибка Base
+
+    delete i;
+}
+
+} // CTP3
+
+
+
+namespace CTP4 { // ------------------------------------ Проверка на объект (is_object)
+
+struct Base {};
+
+template <typename T, std::enable_if_t<std::is_object<T>::value, bool> = true >
+void foo(T arg)
+{}
+
+void test()
+{
+    std::nullptr_t n_ptr;
+    int* i = new int(5);
+    Base b;
+    int& i_r = *i;
+
+    foo(n_ptr);       // Ок std::nullptr_t
+    foo<int*>(i);     // Ок int*
+    foo<int>(*i);     // Ок int
+    foo(b);           // Ок Base
+    //foo<int&>(i_r); // Ошибка int&
+
+    delete i;
+}
+
+} // CTP4
+
+
+
+namespace CTP5 { // ------------------------------------ Проверка на составной тип (is_compound)
+
+struct Base {};
+
+template <typename T, std::enable_if_t<std::is_compound<T>::value, bool> = true >
+void foo(T arg)
+{}
+
+/*
+ * Составные типы:
+ * - array;
+ * - function;
+ * - object pointer;
+ * - function pointer;
+ * - member object pointer;
+ * - member function pointer;
+ * - reference, class;
+ * - union;
+ * - enumeration.
+ */
+
+void test()
+{
+    int* i = new int(5);
+    Base b;
+    int& i_r = *i;
+
+    foo<int*>(i);   // Ок int*
+    //foo<int>(*i); // Ошибка int
+    foo(b);         // Ок Base
+    foo<int&>(i_r); // Ок int&
+
+    delete i;
+}
+
+} // CTP5
 
 
 

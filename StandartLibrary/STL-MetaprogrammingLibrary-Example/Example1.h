@@ -1,6 +1,6 @@
 #pragma once
 
-#include <functional>
+#include <array>
 #include <type_traits>
 #include <iostream>
 
@@ -29,6 +29,59 @@
 
 namespace Example1 {
 
+namespace TP1 { // ------------------------------------ Проверка на указатель общего назначения (is_void)
+
+template <typename T, std::enable_if_t<std::is_void_v<T>, bool> = true>
+void foo(T* arg)
+{}
+
+void test()
+{
+    void* ptr; // Указатель общего назначения
+    int* i = new int(5);
+    float* f = new float(5.5);
+
+    ptr = i; // или = f;
+
+    foo(ptr);   // Ок void
+    //foo(10U); // Ошибка unsigned int
+    //foo('A'); // Ошибка char
+    //foo(i);   // Ошибка int*
+    //foo(f);   // Ошибка float*
+
+    delete i;
+    delete f;
+}
+
+} // TP1
+
+
+
+namespace TP2 { // ------------------------------------ Проверка на нулевой указатель (is_null_pointer)
+
+template <typename T, std::enable_if_t<std::is_null_pointer<T>::value, bool> = true >
+void foo(T arg)
+{}
+
+void test()
+{
+    std::nullptr_t n_ptr1;
+    int* n_ptr2 = nullptr;
+    int* i = new int(5);
+    float* f = new float(5.5);
+
+    foo(n_ptr1);   // Ок std::nullptr_t
+    //foo(n_ptr2); // Ошибка nullptr
+    //foo(i);      // Ошибка int*
+    //foo(f);      // Ошибка float*
+
+    delete i;
+    delete f;
+}
+
+} // TP2
+
+
 
 namespace TP3 { // ------------------------------------ Проверка на целочисленный аргумент (is_integral)
 
@@ -51,6 +104,8 @@ void test()
 }
 
 } // TP3
+
+
 
 namespace TP4 { // ------------------------------------ Проверка на аргумент с плавающей точкой (is_floating_point)
 

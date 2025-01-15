@@ -42,6 +42,7 @@ void test()
 } // namespace TR1
 
 
+
 namespace TR2 { // ------------------------------------ Проверка на наследника базового класса (is_base_of)
 
 struct Base
