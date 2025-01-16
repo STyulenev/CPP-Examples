@@ -224,7 +224,6 @@ void test()
 
 
 
-
 namespace TP7 { // ------------------------------------ Проверка на union (is_union)
 
 struct SomeStruct {};
@@ -354,24 +353,45 @@ void test()
 
 
 
-namespace TP11 { // ------------------------------------ Проверка на lvalue / rvalue (is_lvalue_reference / is_rvalue_reference)
+namespace TP11 { // ------------------------------------ Проверка на lvalue (is_lvalue_reference)
 
 template<class T> struct is_lvalue_reference      : std::false_type {};
 template<class T> struct is_lvalue_reference<T&>  : std::true_type {};
 
-template<class T> struct is_rvalue_reference      : std::false_type {};
-template<class T> struct is_rvalue_reference<T&&> : std::true_type {};
-
 template <typename T, std::enable_if_t<is_lvalue_reference<T>::value, bool> = true>   // Используя is_lvalue_reference
 //template <typename T, std::enable_if_t<std::is_lvalue_reference_v<T>, bool> = true> // Используя стандартный std::is_lvalue_reference_v
-void foo1(T arg)
+void foo(T arg)
 {
     std::cout << "lvalue" << std::endl;
 }
 
+void test()
+{
+    int a = 19;
+    int &a_ref = a;
+
+    // Необходимо указывать тип шаблону, чтобы не произошло сворачивание ссылки:
+    // T & & -> T &: Если мы попытаемся сформировать ссылку на ссылку, где обе являются ссылками lvalue (&), она сворачивается в единственную ссылку lvalue.
+    // T & && -> T &: Если у нас есть ссылка lvalue на ссылку rvalue, она сворачивается до ссылки lvalue.
+    // T && & -> T &: Если у нас есть ссылка rvalue на ссылку lvalue, она сворачивается до ссылки lvalue.
+    // T && && -> T & &&: Если у нас есть ссылка rvalue на ссылку rvalue, она остается ссылкой rvalue.
+
+    foo<int&>(a); // Ок
+    //foo(18);    // Ошибка
+}
+
+} // TP11
+
+
+
+namespace TP12 { // ------------------------------------ Проверка на rvalue (is_rvalue_reference)
+
+template<class T> struct is_rvalue_reference      : std::false_type {};
+template<class T> struct is_rvalue_reference<T&&> : std::true_type {};
+
 template <typename T, std::enable_if_t<is_rvalue_reference<T>::value, bool> = true>   // Используя is_rvalue_reference
 //template <typename T, std::enable_if_t<std::is_rvalue_reference_v<T>, bool> = true> // Используя стандартный std::is_rvalue_reference_v
-void foo2(T arg)
+void foo(T arg)
 {
     std::cout << "rvalue" << std::endl;
 }
@@ -387,13 +407,64 @@ void test()
     // T && & -> T &: Если у нас есть ссылка rvalue на ссылку lvalue, она сворачивается до ссылки lvalue.
     // T && && -> T & &&: Если у нас есть ссылка rvalue на ссылку rvalue, она остается ссылкой rvalue.
 
-    foo1<int&>(a); // Ок
-    //foo1(18);    // Ошибка
-
-    //foo2<int&>(a); // Ошибка
-    foo2<int&&>(18); // Ок
+    //foo<int&>(a); // Ошибка
+    foo<int&&>(18); // Ок
 }
 
-} // TP11
+} // TP12
+
+
+
+namespace TP13 { // ------------------------------------ Проверка на нестатическое поле класса (is_member_object_pointer)
+
+class Base {
+public:
+    int field;
+
+    void method1() {}
+    static void method2() {}
+};
+
+template <typename T, std::enable_if_t<std::is_member_object_pointer<T>::value, bool> = true >
+void foo(T arg)
+{}
+
+void test()
+{
+    Base b;
+    int Base::* pt = &Base::field;
+
+    foo(pt);               // Ок
+    //foo(&Base::method1); // Ошибка
+    //foo(&Base::method2); // Ошибка
+    //foo(12);             // Ошибка
+}
+
+} // TP13
+
+
+
+namespace TP14 { // ------------------------------------ Проверка на нестатический метод класса (is_member_function_pointer)
+
+class Base {
+public:
+    void method1() {}
+    static void method2() {}
+};
+
+template <typename T, std::enable_if_t<std::is_member_function_pointer<T>::value, bool> = true >
+void foo(T arg)
+{}
+
+void test()
+{
+    Base b;
+
+    foo(&Base::method1);   // Ок
+    //foo(&Base::method2); // Ошибка
+    //foo(12);             // Ошибка
+}
+
+} // TP14
 
 } // namespace Example1

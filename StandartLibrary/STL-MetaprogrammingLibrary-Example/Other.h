@@ -19,7 +19,7 @@
 
 namespace Other {
 
-namespace E1 { // ------------------------------------ Проверка на существование класса с метода print (без проверки на тип и с проверкой на тип) (Вариант 1)
+namespace E1 { // ------------------------------------ Проверка на существование класса с методом print (без проверки на тип и с проверкой на тип) (Вариант 1)
 
 // Тестовый класс
 class Base1 {
@@ -220,7 +220,7 @@ auto foo(T arg) -> std::enable_if_t<Impl::isInt<T>, int>
     return 12;
 }
 
-// Если входит в Impl, то вернёт std::string
+// Если не входит в Impl, то вернёт std::string
 template <typename T>
 auto foo(T arg) -> std::enable_if_t<!Impl::isInt<T>, std::string>
 {
@@ -434,5 +434,84 @@ void test()
 }
 
 } // E10
+
+
+namespace E11 { // ------------------------------------ Пример проверки значения во время компиляции
+
+struct Value {};
+struct Color {};
+struct Size {};
+struct Point {};
+
+enum class Property {
+    Color,
+    StrokeColor,
+    Opacity,
+    Size,
+    Position,
+};
+
+class Dom {
+public:
+    template<Property prop, typename AnyValue>
+    void setValue(const std::string& obj, AnyValue value) {
+        setValue(std::integral_constant<Property, prop>{}, obj, value);
+    }
+
+private:
+    // Специализированные скрытые методы
+    void setValue(std::integral_constant<Property, Property::Color> type, const std::string &obj, Color col) {
+        std::cout << " update color property" << std::endl;
+    }
+
+    void setValue(std::integral_constant<Property, Property::StrokeColor> type, const std::string &obj, Color col) {
+        std::cout << " update stroke color property" << std::endl;
+    }
+
+    void setValue(std::integral_constant<Property, Property::Size> type, const std::string &obj, Size size) {
+        std::cout << " update size property" << std::endl;
+    }
+
+};
+
+void test()
+{
+    Dom domObj;
+
+    domObj.setValue<Property::Color>("layer1.rect1", Color());  // Ок
+    //domObj.setValue<Property::Color>("layer1.rect1", Size()); // Ошибка
+    domObj.setValue<Property::Size>("layer1.rect1", Size());    // Ок
+}
+
+} // E11
+
+
+
+namespace E12 { // ------------------------------------ Пример проверки веса переменной
+
+template <class T, class = void>
+struct is_two_or_eight_bytes : std::false_type {};
+
+template <class T>
+struct is_two_or_eight_bytes<T, std::enable_if_t<
+        std::alignment_of<T>::value == 2 || std::alignment_of<T>::value == 8
+        >> : std::true_type {};
+
+template <typename T, std::enable_if_t<is_two_or_eight_bytes<T>::value, bool> = true >
+void foo(T arg)
+{}
+
+void test()
+{
+    short int a = 5;
+
+    //foo(5);  // Ошибка, int = 4
+    foo(12.1); // Ok, double = 8
+    foo(5UL);  // Ok, unsigned long = 8
+    foo(5UL);  // Ok, unsigned long = 8
+    foo(a);    // Ok, short int = 2
+}
+
+} // E12
 
 } // namespace Other

@@ -2,6 +2,7 @@
 #include "Example2.h"
 #include "Example3.h"
 #include "Example4.h"
+#include "Example5.h"
 #include "Example6.h"
 #include "Example7.h"
 #include "Example8.h"
@@ -10,30 +11,33 @@
 
 int main()
 {
-   // Type traits: Type properties
-   {
-       Example1::TP1::test();
-       Example1::TP2::test();
-       Example1::TP3::test();
-       Example1::TP4::test();
-       Example1::TP5::test();
-       Example1::TP6::test();
-       Example1::TP7::test();
-       Example1::TP8::test();
-       Example1::TP9::test();
-       Example1::TP10::test();
-       Example1::TP11::test();
-   }
+    // Type traits: Type properties
+    {
+        Example1::TP1::test();
+        Example1::TP2::test();
+        Example1::TP3::test();
+        Example1::TP4::test();
+        Example1::TP5::test();
+        Example1::TP6::test();
+        Example1::TP7::test();
+        Example1::TP8::test();
+        Example1::TP9::test();
+        Example1::TP10::test();
+        Example1::TP11::test();
+        Example1::TP12::test();
+        Example1::TP13::test();
+        Example1::TP14::test();
+    }
 
-   // Composite type categories
-   {
-       Example2::CTP1::test();
-       Example2::CTP2::test();
-       Example2::CTP3::test();
-       Example2::CTP4::test();
-       Example2::CTP5::test();
-       Example2::CTP6::test();
-   }
+    // Composite type categories
+    {
+        Example2::CTP1::test();
+        Example2::CTP2::test();
+        Example2::CTP3::test();
+        Example2::CTP4::test();
+        Example2::CTP5::test();
+        Example2::CTP6::test();
+    }
 
     // Type properties
     {
@@ -53,11 +57,18 @@ int main()
         Example4::SO1::test();
     }
 
-   // Type relationships
-   {
-       Example6::TR1::test();
-       Example6::TR2::test();
-   }
+    // Property queries
+    {
+        Example5::PQ1::test();
+    }
+
+    // Type relationships
+    {
+        Example6::TR1::test();
+        Example6::TR2::test();
+        Example6::TR4::test();
+        Example6::TR8::test();
+    }
 
     // Type transformations
     {
@@ -65,12 +76,12 @@ int main()
         Example7::TT1_4::test();
     }
 
-   // Logical operations
-   {
-       Example8::LO1::test();
-       Example8::LO2::test();
-       Example8::LO3::test();
-   }
+    // Logical operations
+    {
+        Example8::LO1::test();
+        Example8::LO2::test();
+        Example8::LO3::test();
+    }
 
     // Other
     {
@@ -84,6 +95,7 @@ int main()
         Other::E8::test();
         Other::E9::test();
         Other::E10::test();
+        Other::E11::test();
     }
 
     return 0;

@@ -23,7 +23,6 @@
  *
  */
 
-
 namespace Example6 {
 
 namespace TR1 { // ------------------------------------ Проверка на конкретный тип (is_same)
@@ -73,5 +72,51 @@ void test()
 }
 
 } // namespace TR2
+
+
+
+namespace TR4 { // ------------------------------------ Проверка на конвертацию (is_convertible)
+
+template <typename T, std::enable_if_t<std::is_convertible_v<T, int>, bool> = true >
+void foo(T arg)
+{}
+
+void test()
+{
+    foo(true);  // Ок bool
+    foo(12U);   // Ок unsigned int
+    foo(12.3);  // Ок double
+    foo(12.3);  // Ок float
+    foo(12.3L); // Ок long double
+    foo('A');   // Ок char
+    //foo("A"); // Ошибка const char[2]
+}
+
+} // namespace TR4
+
+
+
+namespace TR8 { // ------------------------------------ Проверка на вызываемый объект - лямбда, функция и т.д. (is_invocable)
+
+template <typename T, std::enable_if_t<std::is_invocable<T>::value, bool> = true >
+void foo(T* f)
+{
+    std::cout << "result = " << std::invoke(f) << std::endl;
+}
+
+int function() {
+    return 0;
+}
+
+void test()
+{
+    int (*f)() = function;
+
+    foo(f);      // Ок bool
+    //foo(12U);  // Ошибка unsigned int
+    //foo(12.3); // Ошибка double
+}
+
+} // namespace TR8
 
 } // namespace Example6

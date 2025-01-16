@@ -95,23 +95,3 @@ void test()
 } // namespace TT1_1
 
 } // namespace Example7
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
