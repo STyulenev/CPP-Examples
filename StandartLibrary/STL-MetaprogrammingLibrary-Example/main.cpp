@@ -67,6 +67,8 @@ int main()
         Example6::TR1::test();
         Example6::TR2::test();
         Example6::TR4::test();
+        Example6::TR5::test();
+        Example6::TR6::test();
         Example6::TR8::test();
     }
 
@@ -96,6 +98,9 @@ int main()
         Other::E9::test();
         Other::E10::test();
         Other::E11::test();
+        Other::E12::test();
+        Other::E13::test();
+        Other::E14::test();
     }
 
     return 0;

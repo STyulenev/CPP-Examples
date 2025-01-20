@@ -96,6 +96,78 @@ void test()
 
 
 
+namespace TR5 { // ------------------------------------ Проверка на конвертацию (is_nothrow_convertible)
+
+struct Base {
+    operator int() {
+        return 0;
+    }
+
+    operator double() noexcept {
+        return 0.0;
+    }
+};
+
+template <typename T, typename V, std::enable_if_t<std::is_nothrow_convertible_v<T, V>, bool> = true >
+void foo(T arg)
+{}
+
+void test()
+{
+    Base b;
+
+    foo<Base, double>(b);  // Ок
+    //foo<Base, int>(b);   // Ошибка
+    //foo<Base, short>(b); // Ошибка
+}
+
+} // namespace TR5
+
+
+
+namespace TR6 { // ------------------------------------ Проверка на конвертацию (is_layout_compatible)
+
+struct Base2;
+
+struct Base1 {
+    int    a;
+    double b;
+};
+
+struct Base2 {
+    long  a;
+    float b;
+};
+
+#if __cplusplus >= 202302L // 202003L
+
+template <typename T, typename V, std::enable_if_t<std::is_is_layout_compatible_v<T, V>, bool> = true >
+void foo(T arg1, V arg2)
+{}
+
+void test()
+{
+    Base1 b1;
+    Base2 b2;
+
+    foo(b1, b2);  // Ок
+    //foo<Base, int>(b);   // Ошибка
+    //foo<Base, short>(b); // Ошибка
+}
+
+#else
+
+void test()
+{
+    std::cout << "Unknown standart" << std::endl;
+}
+
+#endif
+
+} // namespace TR6
+
+
+
 namespace TR8 { // ------------------------------------ Проверка на вызываемый объект - лямбда, функция и т.д. (is_invocable)
 
 template <typename T, std::enable_if_t<std::is_invocable<T>::value, bool> = true >

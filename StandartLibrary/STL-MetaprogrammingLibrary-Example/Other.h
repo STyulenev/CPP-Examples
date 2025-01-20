@@ -514,4 +514,99 @@ void test()
 
 } // E12
 
+
+
+namespace E13 { // ------------------------------------ Проверка на существование класса с метода (Вариант 3)
+
+// Проверка наличия метода size
+template <typename T>
+class has_size_method {
+private:
+    template <typename U>
+    static auto check(int) -> decltype(std::declval<U>().size(), std::true_type{});
+
+    template <typename>
+    static std::false_type check(...);
+
+public:
+    static const bool value = decltype(check<T>(0))::value;
+};
+
+// Функция для типов с методом size
+template <typename T>
+typename std::enable_if<has_size_method<T>::value, void>::type
+foo(const T& obj) {
+    std::cout << "Size: " << obj.size() << std::endl;
+}
+
+// Функция для типов без метода size
+template <typename T>
+typename std::enable_if<!has_size_method<T>::value, void>::type
+foo(const T& obj) {
+    std::cout << "No size method available" << std::endl;
+}
+
+void test()
+{
+    std::vector<int> vec = { 1, 2, 3, 4 };
+    int arr[] = { 1, 2, 3, 4 };
+
+    foo(vec);
+    foo(arr);
+    foo(12.1);
+    foo(5UL);
+    foo(5UL);
+}
+
+} // E13
+
+
+
+namespace E14 { // ------------------------------------ Проверка на валидацию в шапке шаблона через методы класса/структуры
+
+constexpr bool is_valid(char c) {
+    constexpr std::string_view valid ="8123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+    return valid.find(c) != std::string_view::npos;
+}
+
+template<size_t N>
+struct Format {
+    constexpr Format(const char (&str)[N]) {
+        std::copy_n(str, N, value);
+    }
+
+    constexpr bool isValid() const {
+        if constexpr (N == 0) {
+            return false;
+        }
+
+        for (char ch : value) {
+            if (ch != '\0' && !is_valid(ch)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    constexpr std::string_view format() const {
+        return value;
+    }
+
+    char value[N];
+};
+
+template<Format fmt, std::enable_if_t<fmt.isValid(), bool> = true>
+void foo() {
+    std::cout /*<< std::boolalpha << "Status: " << fmt.isValid()*/ << " Processing string: " << fmt.format() << std::endl;
+}
+
+void test()
+{
+   foo<"Valid123">();       //  Ок
+   //foo<"Invalid@Char">(); // Ошибка
+}
+
+} // E14
+
 } // namespace Other
