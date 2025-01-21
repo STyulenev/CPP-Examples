@@ -493,9 +493,7 @@ template <class T, class = void>
 struct is_two_or_eight_bytes : std::false_type {};
 
 template <class T>
-struct is_two_or_eight_bytes<T, std::enable_if_t<
-        std::alignment_of<T>::value == 2 || std::alignment_of<T>::value == 8
-        >> : std::true_type {};
+struct is_two_or_eight_bytes<T, std::enable_if_t<std::alignment_of<T>::value == 2 || std::alignment_of<T>::value == 8>> : std::true_type {};
 
 template <typename T, std::enable_if_t<is_two_or_eight_bytes<T>::value, bool> = true >
 void foo(T arg)
@@ -571,6 +569,7 @@ constexpr bool is_valid(char c) {
 
 template<size_t N>
 struct Format {
+    // Конструктор для преобразования "Valid123", "Invalid@Char" и т.д.
     constexpr Format(const char (&str)[N]) {
         std::copy_n(str, N, value);
     }
@@ -603,10 +602,90 @@ void foo() {
 
 void test()
 {
-   foo<"Valid123">();       //  Ок
-   //foo<"Invalid@Char">(); // Ошибка
+    foo<"Valid123">();       //  Ок
+    //foo<"Invalid@Char">(); // Ошибка
 }
 
 } // E14
+
+
+
+namespace E15 { // ------------------------------------ Проверка на чётность в шапке шаблона (через функцию)
+
+constexpr bool is_even(const int n) {
+    return n % 2 == 0;
+}
+
+template<int n, std::enable_if_t<is_even(n), bool> = true>
+void foo()
+{}
+
+void test()
+{
+    //foo<5>(); //  Ошибка
+    foo<4>();   //  Ок
+    foo<6>();   //  Ок
+}
+
+} // E15
+
+
+
+namespace E16 { // ------------------------------------ Использование enum и типизированного шаблона для индексации классов
+
+class Types {
+public:
+    enum Values {
+        TYPE_0 = 0,
+        TYPE_1 = 1
+        // ...
+    };
+
+    // ...
+};
+
+class IBase {
+public:
+    virtual int getType() const = 0;
+    // ...
+
+};
+
+template <int iType>
+class AbstractBase : public IBase {
+public:
+    AbstractBase() = default;
+
+    int getType() const override {
+        return staticType();
+    }
+
+private:
+    static int staticType() {
+        return iType;
+    }
+
+};
+
+class Type0 : public AbstractBase<Types::TYPE_0> {
+public:
+    // ...
+};
+
+class Type1 : public AbstractBase<Types::TYPE_1> {
+public:
+    // ...
+};
+
+void test()
+{
+    Type0 type0;
+    Type1 type1;
+
+    std::cout << "Type: " << type0.getType() << std::endl;
+    std::cout << "Type: " << type1.getType() << std::endl;
+}
+
+} // E16
 
 } // namespace Other

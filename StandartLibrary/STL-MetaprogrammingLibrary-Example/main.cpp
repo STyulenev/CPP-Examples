@@ -60,6 +60,8 @@ int main()
     // Property queries
     {
         Example5::PQ1::test();
+        Example5::PQ2::test();
+        Example5::PQ3::test();
     }
 
     // Type relationships
@@ -101,6 +103,8 @@ int main()
         Other::E12::test();
         Other::E13::test();
         Other::E14::test();
+        Other::E15::test();
+        Other::E16::test();
     }
 
     return 0;
