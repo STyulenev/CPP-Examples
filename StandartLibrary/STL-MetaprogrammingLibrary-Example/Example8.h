@@ -1,8 +1,6 @@
 #pragma once
 
-#include <functional>
 #include <type_traits>
-#include <iostream>
 
 /*
  * =======================================================================================================================================================================
@@ -18,7 +16,7 @@
 
 namespace Example8 {
 
-namespace LO1 {  // ------------------------------------ Логическое И
+namespace LO1 {  // ------------------------------------ Логическое И (conjunction)
 
 template <typename T>
 struct IsInteger : std::is_integral<T> {};
@@ -71,7 +69,7 @@ void test()
 
 
 
-namespace LO2 {  // ------------------------------------ Логическое ИЛИ
+namespace LO2 {  // ------------------------------------ Логическое ИЛИ (disjunction)
 
 template <typename T>
 struct IsInteger : std::is_same<T, int> {};
@@ -99,7 +97,7 @@ void test()
 
 
 
-namespace LO3 {  // ------------------------------------ Логическое НЕ
+namespace LO3 {  // ------------------------------------ Логическое НЕ (negation)
 
 template <typename T>
 struct NotInt : std::negation<std::is_same<T, int>> {};

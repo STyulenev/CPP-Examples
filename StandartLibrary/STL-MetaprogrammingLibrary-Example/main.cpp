@@ -77,7 +77,14 @@ int main()
     // Type transformations
     {
         Example7::TT1_1::test();
+        Example7::TT1_2::test();
+        Example7::TT1_3::test();
         Example7::TT1_4::test();
+
+        Example7::TT2_1::test();
+
+        Example7::TT3_1::test();
+        Example7::TT3_2::test();
     }
 
     // Logical operations

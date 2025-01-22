@@ -54,8 +54,6 @@
 
 namespace Example7 {
 
-// ------------------------------------ Const-volatility specifiers ------------------------------------
-
 namespace TT1_1 { // ------------------------------------ Пример удаления volatile и const (remove_cv)
 
 template <typename T>
@@ -121,14 +119,14 @@ void test()
 
 
 
-namespace TT1_3 { // ------------------------------------ Пример удаления volatile и const
+namespace TT1_3 { // ------------------------------------ Пример удаления volatile (remove_volatile)
 
 template <typename T>
 struct IsInt : std::is_same<T, int> {};
 
 // Удаляется const для проверок в шапке шаблона
 template <typename T>
-struct DeleteVolatile : std::is_same<std::remove_const<T>, int> {};
+struct DeleteVolatile : std::is_same<std::remove_volatile<T>, int> {};
 
 template <typename T>
 constexpr bool IsInteger = std::conjunction<DeleteVolatile<T>, IsInt<T>>::value;
@@ -151,22 +149,35 @@ void test()
 
 
 
-namespace TT1_4 { // ------------------------------------ Пример удаления volatile (remove_volatile)
+namespace TT1_4 { // ------------------------------------ Пример добавления volatile и const (add_cv)
+
+struct Base
+{
+    void m() { std::cout << " - Non-cv\n"; }
+    void m() const { std::cout << " - Const\n"; }
+    void m() volatile { std::cout << " - Volatile\n"; }
+    void m() const volatile { std::cout << " - Const-volatile\n"; }
+};
+
+template <typename T>
+void foo()
+{
+    T t;
+    t.m();
+}
 
 void test()
 {
+    Base b;
 
+    foo<std::add_cv<Base>::type>();
 }
 
 } // namespace TT1_4
 
 
 
-// ------------------------------------ References ------------------------------------
-
-
-
-namespace TT2_1 {
+namespace TT2_1 { // ------------------------------------ Пример удаления ссылки (remove_reference)
 
 template <typename T, std::enable_if_t<std::is_same_v<std::remove_reference_t<T>, int>, bool> = true >
 void foo(T& arg)
@@ -184,5 +195,39 @@ void test()
 }
 
 } // namespace TT2_1
+
+
+
+namespace TT3_1 { // ------------------------------------ Пример приведение к знаковой переменной (make_signed)
+
+template <typename T, std::enable_if_t<std::is_same_v<std::make_signed_t<T>, int>, bool> = true >
+void foo(T arg)
+{}
+
+void test()
+{
+    foo(5U);    // Ок
+    foo(5);     // Ок
+    //foo(5.5); // Ошибка
+}
+
+} // namespace TT3_1
+
+
+
+namespace TT3_2 { // ------------------------------------ Пример приведение к беззнаковой переменной (make_signed)
+
+template <typename T, std::enable_if_t<std::is_same_v<std::make_unsigned_t<T>, unsigned int>, bool> = true >
+void foo(T arg)
+{}
+
+void test()
+{
+    foo(5U);    // Ок
+    foo(5);     // Ок
+    //foo(5.5); // Ошибка
+}
+
+} // namespace TT3_2
 
 } // namespace Example7
