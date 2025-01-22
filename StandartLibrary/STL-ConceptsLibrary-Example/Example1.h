@@ -281,6 +281,112 @@ void test()
 
 
 
+namespace CL10 { // ------------------------------------ Проверка на назначаемый из тип (assignable_from)
+
+template <class T>
+concept IsFromInt = std::assignable_from<T, int>;
+
+template <class T> requires IsFromInt<T>
+void foo(T arg)
+{}
+
+void test()
+{
+    int i = 12;
+    int& ref = i;
+
+    foo<int&>(ref); // Оk
+    //foo(i);       // Ошибка
+    //foo(2.1);     // Ошибка
+}
+
+} // namespace CL10
+
+
+
+namespace CL11 { // ------------------------------------ Проверка на swap (swappable)
+
+
+struct Base1 {
+    int field;
+
+    Base1(int field) : field(field) {}
+
+    friend void swap(Base1& lhs, Base1& rhs) noexcept {
+        std::swap(lhs.field, rhs.field);
+    }
+};
+
+struct Base2 {
+    int field;
+
+    Base2(int field) : field(field) {}
+};
+
+template <class T>
+concept IsSwap = std::swappable<T>;
+
+template <class T> requires IsSwap<T>
+void foo(T arg1, T arg2)
+{}
+
+void test()
+{
+    Base1 b1_1(1);
+    Base1 b2_1(2);
+
+    Base2 b1_2(1);
+    Base2 b2_2(2);
+
+    foo(b1_1, b2_1);   // Оk
+    //foo(b1_2, b2_1); // Ошибка
+    foo(2, 2);         // Оk
+}
+
+} // namespace CL11
+
+
+
+namespace CL12 { // ------------------------------------ Проверка на swap (swappable_with)
+
+
+struct Base {
+    int field;
+
+    Base(int field) : field(field) {}
+
+    friend void swap(Base& lhs, Base& rhs) noexcept {
+        std::swap(lhs.field, rhs.field);
+    }
+};
+
+template <class T, class U>
+concept IsSwap = std::swappable_with<T, U>;
+
+template <class T, class U> requires IsSwap<T, U>
+void foo(T&& arg1, U&& arg2)
+{}
+
+/*template <class T, class U> requires std::swappable_with<T,U>
+void mySwap(T&& t, U&& u) {
+    auto temp = std::forward<T>(t);
+    t = std::forward<U>(u);
+    u = std::move(temp);
+}*/
+
+void test()
+{
+    Base b1(1);
+    Base b2(2);
+
+    foo(b1, b2); // Оk
+    //foo(2, 2); // Ошибка
+}
+
+} // namespace CL12
+
+
+
 namespace CL13 { // ------------------------------------ Проверка на удаляемость (destructible)
 
 class Base1 {};
