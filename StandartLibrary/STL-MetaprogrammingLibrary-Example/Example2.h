@@ -221,4 +221,35 @@ void test() {
 
 } // CTP6
 
+
+
+namespace CTP7 { // ------------------------------------ Проверка на ссылку (is_reference)
+
+struct Base {
+    int p;
+
+    Base() {
+        p = 5;
+    }
+};
+
+template <typename T, std::enable_if_t<std::is_member_pointer_v<T>, bool> = true >
+void foo(T arg)
+{}
+
+void test() {
+    Base b;
+
+    // Указатель на поле класса
+    int Base::* point = &Base::p;
+
+    //foo(b);   // Ошибка
+    foo(point); // Ок
+    //foo(5);   // Ошибка
+
+    std::cout << "b.p = " << b.*point << std::endl;
+}
+
+} // CTP7
+
 } // Example2

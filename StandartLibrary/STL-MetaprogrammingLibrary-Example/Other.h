@@ -688,4 +688,30 @@ void test()
 
 } // E16
 
+
+
+namespace E17 { // ------------------------------------ Наследование от lambda
+
+template<class Lambda>
+struct Base : public Lambda
+{
+    Base(Lambda lambda) : Lambda(std::move(lambda)) {}
+
+    // Переопределили оператор (), чтобы вызывать лямбду через него.
+    using Lambda::operator();
+};
+
+void test()
+{
+    // Т.к. лямбда это класс, то можно от него наследоваться
+    auto lambda = []() -> int {
+        return 0;
+    };
+
+    Base b{lambda};
+    std::cout << "Lambda: " << b() << std::endl;
+}
+
+} // E17
+
 } // namespace Other

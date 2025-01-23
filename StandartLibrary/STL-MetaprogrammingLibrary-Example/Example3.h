@@ -1,6 +1,5 @@
 #pragma once
 
-#include <functional>
 #include <type_traits>
 #include <iostream>
 
@@ -77,7 +76,7 @@ void test()
 
 
 
-namespace TP3 { // ------------------------------------ Проверка на тривиальность (is_trivial и is_trivially_copyable)
+namespace TP3 { // ------------------------------------ Проверка на тривиальность (is_trivial)
 
 struct TrivialClass
 {
@@ -92,7 +91,6 @@ struct TrivialClass
 struct NonTrivialClass
 {
     NonTrivialClass() {} // Для нетривиальности достаточно сделать свою реализацию конструктора != is_trivial
-    NonTrivialClass(const NonTrivialClass& c) {} // != is_trivially_copyable_v
 };
 
 template <typename T, std::enable_if_t<std::is_trivial<T>::value, bool> = true>
@@ -109,6 +107,43 @@ void test()
 }
 
 } // TP3
+
+
+
+namespace TP4 { // ------------------------------------ Проверка на тривиальность (is_trivially_copyable)
+
+struct TrivialClass
+{
+    TrivialClass() = default;
+    TrivialClass(const TrivialClass&) = default;
+    TrivialClass(TrivialClass&&) = default;
+    TrivialClass& operator=(const TrivialClass&) = default;
+    TrivialClass& operator=(TrivialClass&&) = default;
+    ~TrivialClass() = default;
+};
+
+struct NonTrivialClass
+{
+    NonTrivialClass() = default; // == is_trivial
+    NonTrivialClass(const NonTrivialClass& c) {} // != is_trivially_copyable
+};
+
+template <typename T, std::enable_if_t<std::is_trivially_copyable<T>::value, bool> = true>
+void foo(T& arg)
+{}
+
+void test()
+{
+    TrivialClass tc;
+    NonTrivialClass ntc;
+
+    foo(tc);    // Ок
+    //foo(ntc); // Ошибка
+}
+
+} // TP4
+
+
 
 namespace TP5 { // ------------------------------------ Проверка на стандартную компоновку (is_standard_layout)
 /*
@@ -140,7 +175,108 @@ void test()
     //foo(nsl); // Ошибка
 }
 
-} // TP5
+} // TP5 is_pod
+
+
+
+namespace TP6 { // ------------------------------------ Проверка на pod структуру (is_pod)
+/*
+ * POD-типы в C++ (Plain Old Data) — это встроенные типы данных (классы и структуры), которые, в отличие от других
+ * классов и структур, не содержат пользовательских конструкторов, деструкторов или виртуальных функций, а их члены
+ * являются общедоступными.
+*/
+
+#if __cplusplus < 202302L // 202003L
+
+enum Enum {
+    FIRST = 1,
+    SECOND
+};
+
+struct Base1 {
+    int a;
+    // ...
+};
+
+struct Base2 : public Base1 {
+    int a;
+};
+
+template <typename T, std::enable_if_t<std::is_pod<T>::value, bool> = true>
+void foo(T& arg)
+{}
+
+void test()
+{
+    Base1 b1;
+    Base2 b2;
+
+    Enum e = Enum::FIRST;
+
+    foo(b1);   // Ок
+    //foo(b2); // Ошибка
+    foo(e);    // Ок
+    //foo(15); // Ошибка
+}
+
+#else
+
+void test()
+{
+    std::cout << "Unknown standart" << std::endl;
+}
+
+#endif
+
+} // TP6
+
+
+
+namespace TP7 { // ------------------------------------ Проверка на литературный тип (is_literal_type)
+
+#if __cplusplus <= 202002L
+
+enum Enum {
+    FIRST = 1,
+    SECOND
+};
+
+struct Base1 {
+    int a;
+    // ...
+};
+
+struct Base2 {
+    virtual ~Base2() {}
+};
+
+template <typename T, std::enable_if_t<std::is_literal_type<T>::value, bool> = true>
+void foo(T& arg)
+{}
+
+void test()
+{
+    Base1 b1;
+    Base2 b2;
+
+    Enum e = Enum::FIRST;
+
+    foo(b1);   // Ок
+    //foo(b2); // Ошибка
+    foo(e);    // Ок
+    //foo(15); // Ошибка
+}
+
+#else
+
+void test()
+{
+    std::cout << "Unknown standart" << std::endl;
+}
+
+#endif
+
+} // TP7
 
 
 
@@ -253,8 +389,34 @@ void test()
 
 
 
+namespace TP12 { // ------------------------------------ Проверка на полиморфный класс/структуру (is_final)
 
-namespace TP12 { // ------------------------------------ Проверка на агрегатный класс/структуру (is_aggregate)
+// Полиморфический класс — это класс, который объявляет или наследует хотя бы одну виртуальную функцию.
+
+struct Base1 final
+{};
+
+struct Base2
+{};
+
+template <typename T, std::enable_if_t<std::is_final<T>::value, bool> = true>
+void foo(T arg)
+{}
+
+void test()
+{
+    Base1 b1;
+    Base2 b2;
+
+    foo(b1);   // Ок
+    //foo(b2); // Ошибка
+}
+
+} // TP12
+
+
+
+namespace TP13 { // ------------------------------------ Проверка на агрегатный класс/структуру (is_aggregate)
 
 // Агрегатный класс в C++ — это класс, который является просто набором публичных элементов (полей и методов).
 // Если есть private/protected/virtual методы/поля, наследование и т.д., то это уже не агрегатный класс.
@@ -306,25 +468,22 @@ void test()
     delete b3;
 }
 
-} // TP12
+} // TP13
 
 
 
-namespace TP13 { // ------------------------------------ Проверка на класс/структуру с неявным временем жизни (is_implicit_lifetime)
-
-// Агрегатный класс в C++ — это класс, который является просто набором публичных элементов (полей и методов).
-// Если есть private/protected/virtual методы/поля, наследование и т.д., то это уже не агрегатный класс.
+namespace TP14 { // ------------------------------------ Проверка на класс/структуру с неявным временем жизни (is_implicit_lifetime)
 
 #if __cplusplus >= 202302L // 202003L
 
 struct Base1
 {
-    ~Base() = delete;
+    ~Base1() = delete;
 };
 
 struct Base2
 {
-    ~Base() = default;
+    ~Base2() = default;
 };
 
 template <typename T, std::enable_if_t<std::is_implicit_lifetime<T>::value, bool> = true>
@@ -350,6 +509,38 @@ void test()
 
 #endif
 
-} // TP13
+} // TP14
+
+
+
+namespace TP15 { // ------------------------------------ Проверка на signed (is_signed)
+
+template <typename T, std::enable_if_t<std::is_signed<T>::value, bool> = true>
+void foo(T arg) // Без ссылки не пройдут именованные константы.
+{}
+
+void test()
+{
+    foo(12);    // Ок
+    //foo(12U); // Ошибка
+}
+
+} // TP15
+
+
+
+namespace TP16 { // ------------------------------------ Проверка на unsigned (is_unsigned)
+
+template <typename T, std::enable_if_t<std::is_unsigned<T>::value, bool> = true>
+void foo(T arg) // Без ссылки не пройдут именованные константы.
+{}
+
+void test()
+{
+    //foo(12); // Ошибка
+    foo(12U);  // Ок
+}
+
+} // TP16
 
 } // namespace Example3

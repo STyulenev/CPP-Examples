@@ -37,6 +37,7 @@ int main()
         Example2::CTP4::test();
         Example2::CTP5::test();
         Example2::CTP6::test();
+        Example2::CTP7::test();
     }
 
     // Type properties
@@ -44,12 +45,18 @@ int main()
         Example3::TP1::test();
         Example3::TP2::test();
         Example3::TP3::test();
+        Example3::TP4::test();
         Example3::TP5::test();
+        Example3::TP6::test();
+        Example3::TP7::test();
         Example3::TP9::test();
         Example3::TP10::test();
         Example3::TP11::test();
         Example3::TP12::test();
         Example3::TP13::test();
+        Example3::TP14::test();
+        Example3::TP15::test();
+        Example3::TP16::test();
     }
 
     // Supported operations
@@ -112,6 +119,7 @@ int main()
         Other::E14::test();
         Other::E15::test();
         Other::E16::test();
+        Other::E17::test();
     }
 
     return 0;
