@@ -11,6 +11,7 @@
 
 int main()
 {
+
     // Type traits: Type properties
     {
         Example1::TP1::test();
@@ -57,6 +58,8 @@ int main()
         Example3::TP14::test();
         Example3::TP15::test();
         Example3::TP16::test();
+        Example3::TP17::test();
+        Example3::TP18::test();
     }
 
     // Supported operations
@@ -92,6 +95,11 @@ int main()
 
         Example7::TT3_1::test();
         Example7::TT3_2::test();
+
+        Example7::TT6_1::test();
+        Example7::TT6_3::test();
+        Example7::TT6_5::test();
+        Example7::TT6_6::test();
     }
 
     // Logical operations

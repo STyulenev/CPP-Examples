@@ -153,10 +153,10 @@ namespace TT1_4 { // ------------------------------------ Пример доба�
 
 struct Base
 {
-    void m() { std::cout << " - Non-cv\n"; }
-    void m() const { std::cout << " - Const\n"; }
-    void m() volatile { std::cout << " - Volatile\n"; }
-    void m() const volatile { std::cout << " - Const-volatile\n"; }
+    void m() { std::cout << " - Non-cv" << std::endl; }
+    void m() const { std::cout << " - Const" << std::endl; }
+    void m() volatile { std::cout << " - Volatile" << std::endl; }
+    void m() const volatile { std::cout << " - Const-volatile" << std::endl; }
 };
 
 template <typename T>
@@ -229,5 +229,96 @@ void test()
 }
 
 } // namespace TT3_2
+
+
+
+namespace TT6_1 { // ------------------------------------ Пример создания хранилища (aligned_storage)
+
+template<class T, std::size_t N>
+void foo()
+{
+    std::aligned_storage_t<sizeof(T), alignof(T)> data[N];
+    std::size_t m_size = N;
+
+     // Конструктор
+    ::new(&data[1]) T(1);
+
+     // Чтение
+    std::cout << "data[1] = " << *std::launder(reinterpret_cast<const T*>(&data[1])) << std::endl;
+
+    // Очистка
+    for (std::size_t pos = 0; pos < m_size; ++pos)
+        std::destroy_at(std::launder(reinterpret_cast<T*>(&data[pos])));
+}
+
+void test()
+{
+    foo<int, 5>();
+}
+
+} // namespace TT6_1
+
+
+
+namespace TT6_3 { // ------------------------------------ Пример неявные преобразований (decay)
+
+// decay - применяет неявные преобразования lvalue-to-rvalue, array-to-pointer и function-to-pointer к типу T
+
+template<typename T, std::enable_if_t<std::is_same_v<std::decay_t<T>, int>, bool> = true >
+void foo(T arg)
+{}
+
+void test()
+{
+    int a = 5;
+
+    foo<int&>(a);  // Ок
+    foo<int>(5);   // Ок
+    //foo(5.1);    // Ошибка
+    foo<int&&>(5); // Ок
+}
+
+} // namespace TT6_3
+
+
+
+namespace TT6_5 { // ------------------------------------ Пример шаблонного if (enable_if)
+
+// Тест-функция для получения true/false значения
+constexpr bool status(const bool s) {
+    return s;
+}
+
+template<bool s, class T, std::enable_if_t<status(s), bool> = true>
+void foo(T arg)
+{}
+
+void test()
+{
+    //foo<false>(5); // Ок
+    foo<true>(5);    // Ошибка
+}
+
+} // namespace TT6_5
+
+
+
+namespace TT6_6 { // ------------------------------------ Пример условия (conditional)
+
+// Если B == true, то тип возвращаемого значения T, иначе U
+
+template<bool B, typename T, typename U >
+std::conditional<B, T, U>::type foo(T arg1, U arg2)
+{
+    return B ? arg1 : arg2;
+}
+
+void test()
+{
+    std::cout << "type value: " << foo<true>(1, 1.1) << std::endl;
+    std::cout << "type value: " << foo<false>(1, 1.1) << std::endl;
+}
+
+} // namespace TT6_6
 
 } // namespace Example7

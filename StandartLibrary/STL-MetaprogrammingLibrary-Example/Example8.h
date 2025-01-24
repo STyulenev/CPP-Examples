@@ -13,7 +13,6 @@
  *
  */
 
-
 namespace Example8 {
 
 namespace LO1 {  // ------------------------------------ Логическое И (conjunction)

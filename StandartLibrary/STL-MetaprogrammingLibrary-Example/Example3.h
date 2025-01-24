@@ -543,4 +543,53 @@ void test()
 
 } // TP16
 
+
+
+namespace TP17 { // ------------------------------------ Проверка на массив с известным размером (is_bounded_array)
+
+template<class T>
+struct is_my_bounded_array : std::false_type {};
+
+template<class T, std::size_t N>
+struct is_my_bounded_array<T[N]> : std::true_type {
+    static std::size_t getSize() { return N;}
+};
+
+template <typename T, std::enable_if_t<is_my_bounded_array<T>::value, bool> = true>
+// template <typename T, std::enable_if_t<std::is_my_bounded_array<T>::value, bool> = true>
+void foo(T& arg)
+{
+    std::cout << "Array size: " << is_my_bounded_array<T>::getSize() << std::endl;
+}
+
+void test()
+{
+    int array1[3] = {1, 2, 3};
+    int array2[] = {};
+
+    //foo(12); // Ошибка
+    foo(array1);   // Ок
+    //foo(array2); // Ошибка
+}
+
+} // TP17
+
+
+
+namespace TP18 { // ------------------------------------ Проверка на массив с неизвестным размером (is_unbounded_array)
+
+template <typename T, std::enable_if_t<std::is_unbounded_array<T>::value, bool> = true>
+void foo(T& arg)
+{}
+
+void test()
+{
+    int array1[3] = {1, 2, 3}; // = 3
+
+    //foo(12);     // Ошибка
+    //foo(array1); // Ошибка
+}
+
+} // TP18
+
 } // namespace Example3
