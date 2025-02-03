@@ -4,6 +4,7 @@
 #include <iostream>
 #include <optional>
 #include <utility>
+#include <variant>
 
 /*
  * =======================================================================================================================================================================
@@ -91,7 +92,7 @@ struct SomeClass {
 
 void test()
 {
-    std::cout << "\nfile: " << __FILE_NAME__ << " line: " << __LINE__ << ", " << __FUNCTION__ << ":" << std::endl;
+    // std::cout << "\nfile: " << __FILE_NAME__ << " line: " << __LINE__ << ", " << __FUNCTION__ << ":" << std::endl;
 
     { // Стандартная перегрузка swap для pair
         auto p1 = std::make_pair<std::string, std::string>("1", "46456"); // типы должны совпадать
@@ -135,7 +136,7 @@ namespace GPU7_1 { // ----------------------------------- Sum types and type era
 
 void test()
 {
-    std::cout << "\nfile: " << __FILE_NAME__ << " line: " << __LINE__ << ", " << __FUNCTION__ << ":" << std::endl;
+    // std::cout << "\nfile: " << __FILE_NAME__ << " line: " << __LINE__ << ", " << __FUNCTION__ << ":" << std::endl;
 
     {
         auto lambda = [](bool status) -> std::optional<std::string> {
@@ -178,11 +179,76 @@ void test()
 
 
 
+namespace GPU7_3 { // ----------------------------------- Sum types and type erased wrappers: variant
+
+struct PrintVariant {
+    void operator()(const int n) { std::cout << "variant value = " << n << std::endl; }
+    void operator()(const std::string& str) { std::cout << "variant value = " << str << std::endl; }
+    void operator()(const bool status) { std::cout << std::boolalpha << "variant value = " << status << std::endl; }
+};
+
+void test()
+{
+    // std::cout << "\nfile: " << __FILE_NAME__ << " line: " << __LINE__ << ", " << __FUNCTION__ << ":" << std::endl;
+
+    { // std::variant и std::get
+        std::variant<int, std::string, bool> variant;
+
+        variant = true;
+
+        try {
+            [[maybe_unused]] bool status = std::get<bool>(variant);            // Ок
+            [[maybe_unused]] std::string str = std::get<std::string>(variant); // Ошибка
+        } catch(const std::bad_variant_access& ex) {
+            std::cout << "std::variant error: " << ex.what() << std::endl;
+        }
+    }
+
+    { // std::get_if
+        std::variant<int, std::string, bool> variant;
+
+        variant = true;
+
+        if (const int* val = std::get_if<int>(&variant)) {
+            std::cout << "variant value = " << *val << std::endl;
+        } else {
+            std::cout << "variant invalid" << std::endl;
+        }
+    }
+
+    { // std::visit
+        std::variant<int, std::string, bool> variant;
+
+        variant = true;
+        std::visit(PrintVariant{}, variant);
+
+        variant = std::string("hello");
+        std::visit(PrintVariant{}, variant);
+
+        variant = 34;
+        std::visit(PrintVariant{}, variant);
+    }
+
+    { // std::holds_alternative
+        std::variant<int, std::string, bool> variant;
+
+        variant = 34; //true; // std::string("hello");
+
+        if (std::holds_alternative<int>(variant)) {
+            std::cout << "holds_alternative = true" << std::endl;
+        } else {
+            std::cout << "holds_alternative = false" << std::endl;
+        }
+    }
+}
+
+} // namespace GPU7_3
+
 namespace GPU7_4 { // ----------------------------------- Sum types and type erased wrappers: any
 
 void test()
 {
-    std::cout << "\nfile: " << __FILE_NAME__ << " line: " << __LINE__ << ", " << __FUNCTION__ << ":" << std::endl;
+    // std::cout << "\nfile: " << __FILE_NAME__ << " line: " << __LINE__ << ", " << __FUNCTION__ << ":" << std::endl;
 
     {
         std::any any;
