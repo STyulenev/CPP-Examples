@@ -9,6 +9,11 @@ set(PROJECT_SOURCES
     main.cpp
 
     Example1.h # General-purpose utilities
+
+    # Bitset
+    # Bit manipulation (since C++20)
+    # Function objects (since C++11)
+    # Hash support (since C++11)
 )
 
 add_executable(${PROJECT_NAME} ${PROJECT_SOURCES})

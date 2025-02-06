@@ -1,10 +1,12 @@
 #pragma once
 
 #include <any>
+#include <functional>
 #include <iostream>
 #include <optional>
 #include <utility>
 #include <variant>
+#include <tuple>
 
 /*
  * =======================================================================================================================================================================
@@ -130,6 +132,176 @@ void test()
 }
 
 } // namespace GPU1_1
+
+
+
+namespace GPU6_1 { // ----------------------------------- Pairs and tuples: pair
+
+void print(int a, double b)
+{
+    std::cout << "pair { " << a << ", " << b << " }"<< std::endl;
+}
+
+struct PrintS {
+    void operator()(const std::pair<int, double>& p) const
+    {
+        std::cout << "pair { " << p.first << ", " << p.second << " }"<< std::endl;
+    }
+};
+
+void test()
+{
+    { // Списобы инициализации
+        std::pair<int, double> p1 = std::make_pair(1, 2.3);
+        std::pair<int, double> p2 (1, 2.3);
+        std::pair<int, double> p3 = { 1, 2.3 };
+        auto p4 = std::make_pair(1, 2.3);
+    }
+
+    { // std::get
+        auto p = std::make_pair("...", 2.3);
+
+        std::cout << "pair { " << std::get<0>(p) << ", " << std::get<1>(p) << " }"<< std::endl;
+    }
+
+    { // std::apply
+        std::pair<int, double> p = std::make_pair(1, 2.3);
+
+        std::apply(print, p);
+    }
+
+    { // std::invoke
+        auto printL = [](const std::pair<int, double>& p) -> void {
+            std::cout << "pair { " << p.first << ", " << p.second << " }"<< std::endl;
+        };
+
+        std::pair<int, double> p = std::make_pair(1, 2.3);
+
+        std::invoke(printL, p);
+        std::invoke(PrintS(), p);
+    }
+}
+
+} // namespace GPU6_1
+
+
+
+namespace GPU6_2 { // ----------------------------------- Pairs and tuples: tuple
+
+void print(int a, double b, const std::string& c)
+{
+    std::cout << "tuple { " << a << ", " << b << ", " << c << " }"<< std::endl;
+}
+
+struct PrintS {
+    void operator()(const std::tuple<int, double, std::string>& t) const
+    {
+        std::cout << "tuple { " << std::get<0>(t) << ", " << std::get<1>(t) << ", " << std::get<2>(t) << " }"<< std::endl;
+    }
+};
+
+void test()
+{
+    { // Списобы инициализации
+        std::tuple<int, double, std::string> t1 = std::make_tuple(1, 2.3, "...");
+        std::tuple<int, double, std::string> t2 (1, 2.3, "...");
+        std::tuple<int, double, std::string> t3 = { 1, 2.3, "..." };
+        auto t4 = std::make_tuple(1, 2.3, "...");
+    }
+
+    { // Получение элементов через std::get
+        auto t = std::make_tuple(1, 2.3, std::string("..."));
+
+        std::cout << "tuple { " << std::get<0>(t) << ", " << std::get<1>(t) << ", " << std::get<2>(t) << " }"<< std::endl;
+        std::cout << "tuple { " << std::get<int>(t) << ", " << std::get<double>(t) << ", " << std::get<std::string>(t) << " }"<< std::endl;
+    }
+
+    { // std::apply
+        auto t = std::make_tuple(1, 2.3, std::string("..."));
+
+        std::apply(print, t);
+    }
+
+    { // std::invoke
+        auto printL = [](const std::tuple<int, double, std::string>& t) -> void {
+            std::cout << "tuple { " << std::get<0>(t) << ", " << std::get<1>(t) << ", " << std::get<2>(t) << " }"<< std::endl;
+        };
+
+        auto t = std::make_tuple(1, 2.3, std::string("..."));
+
+        std::invoke(printL, t);
+        std::invoke(PrintS(), t);
+    }
+
+    { // Получение элементов через auto []
+        auto lambda = []() { return std::make_tuple(1, 2.3, std::string("...")); };
+        auto [a, b, c] = lambda();
+        print(a, b, c);
+    }
+
+    { // Получение элементов через std::tie
+        auto lambda = []() { return std::make_tuple(1, 2.3, std::string("...")); };
+
+        int a;
+        double b;
+        std::string c;
+
+        std::tie(a, b, c) = lambda();
+
+        print(a, b, c);
+    }
+
+    { // std::tuple_cat
+        int n1 = 0;
+        int n2 = 9;
+        auto tc = std::tuple_cat(std::tie(n1), std::make_tuple(1, 2.3, std::string("...")), std::tie(n2));
+
+        std::cout << "tuple_cat { " << std::get<0>(tc) << ", " << std::get<1>(tc) << ", " << std::get<2>(tc) << ", " << std::get<3>(tc) << ", " << std::get<4>(tc) <<" }"<< std::endl;
+    }
+}
+
+} // namespace GPU6_2
+
+
+
+namespace GPU6_3 { // ----------------------------------- Pairs and tuples: apply
+
+void print1(int a, double b)
+{
+    std::cout << "print { " << a << ", " << b << " }"<< std::endl;
+}
+
+void print2(int a, double b, const std::string& c)
+{
+    std::cout << "print { " << a << ", " << b << ", " << c << " }"<< std::endl;
+}
+
+void print3(int a, int b)
+{
+    std::cout << "print { " << a << ", " << b << " }"<< std::endl;
+}
+
+void test()
+{
+    { // std::pair
+        auto p = std::make_pair(1, 2.3);
+        std::apply(print1, p);
+    }
+
+    { // std::tuple
+        auto t = std::make_tuple(1, 2.3, std::string("..."));
+        std::apply(print2, t);
+    }
+
+    { // std::array
+        std::array<int, 2> a = {1, 2};
+        std::apply(print3, a);
+    }
+
+}
+
+} // namespace GPU6_3
+
 
 
 namespace GPU7_1 { // ----------------------------------- Sum types and type erased wrappers: optional
