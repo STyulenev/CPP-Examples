@@ -1,6 +1,7 @@
 #pragma once
 
 #include <any>
+#include <expected>
 #include <functional>
 #include <iostream>
 #include <optional>
@@ -71,7 +72,7 @@
 
 namespace Example1 {
 
-namespace GPU1_1 { // ----------------------------------- Swap: swap
+namespace GPU1_1 { // ----------------------------------- Swap: exchange
 
 struct SomeClass {
     SomeClass(int a, int b) : a(a), b(b) {}
@@ -128,12 +129,63 @@ void test()
 
         std::cout << "sc1 = " << sc1 << ", " << "sc2 = " << sc2 << "}\n";
     }
-
 }
 
 } // namespace GPU1_1
 
 
+
+namespace GPU1_2 { // ----------------------------------- Swap: swap
+
+struct SomeClass {
+    SomeClass(int a, int b) : a(a), b(b) {}
+
+    int a;
+    int b;
+
+    SomeClass& operator=(SomeClass& other) noexcept
+    {
+        a = std::exchange(other.a, 0);
+        b = std::exchange(other.b, 0);
+
+        return *this;
+    }
+
+    friend std::ostream& operator << (std::ostream &os, const SomeClass &someClass) {
+        return os << someClass.a << " " << someClass.b;
+    }
+};
+
+void test()
+{
+    // std::cout << "\nfile: " << __FILE_NAME__ << " line: " << __LINE__ << ", " << __FUNCTION__ << ":" << std::endl;
+
+    { // Стандартная перегрузка swap для pair
+        auto p1 = std::make_pair<std::string, std::string>("1", "46456");
+        auto p2 = std::make_pair<std::string, std::string>("1", "46456");
+
+        std::cout << "p1 = {" << std::get<0>(p1) << ", " << std::get<1>(p1) << "}, "
+                  << "p2 = {" << std::get<0>(p2) << ", " << std::get<1>(p2) << "}\n";
+
+        p2 = std::exchange(p1, {"_", "_____"});
+
+        std::cout << "p1 = {" << std::get<0>(p1) << ", " << std::get<1>(p1) << "}, "
+                  << "p2 = {" << std::get<0>(p2) << ", " << std::get<1>(p2) << "}\n";
+    }
+
+    { // Для пользовательского класса
+        auto sc1 = SomeClass(1, 2);
+        auto sc2 = SomeClass(2, 1);
+
+        std::cout << "sc1 = " << sc1 << ", " << "sc2 = " << sc2 << "}\n";
+
+        sc1 = sc2;
+
+        std::cout << "sc1 = " << sc1 << ", " << "sc2 = " << sc2 << "}\n";
+    }
+}
+
+} // namespace GPU1_2
 
 namespace GPU6_1 { // ----------------------------------- Pairs and tuples: pair
 
@@ -348,6 +400,29 @@ void test()
 }
 
 } // namespace GPU7_1
+
+
+
+namespace GPU7_2 { // ----------------------------------- Sum types and type erased wrappers: expected
+
+std::expected<int, double> check(bool status)
+{
+    if (status)
+        return 1;
+    else
+        return std::unexpected(1.1);
+}
+
+void test()
+{
+    auto result1 = check(true);
+    std::cout << "value = " << *result1 << std::endl;
+
+    auto result2 = check(false);
+    std::cout << "value = " << result2.error() << std::endl;
+}
+
+} // namespace GPU7_2
 
 
 
