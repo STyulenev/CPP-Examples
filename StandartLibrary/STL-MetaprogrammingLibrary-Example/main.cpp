@@ -6,6 +6,7 @@
 #include "Example6.h"
 #include "Example7.h"
 #include "Example8.h"
+#include "Example9.h"
 
 #include "Other.h"
 
@@ -128,6 +129,23 @@ int main()
         Other::E15::test();
         Other::E16::test();
         Other::E17::test();
+    }
+
+    // Ratio
+    {
+        Example9::CTF_1::test();
+
+        Example9::CTRA_1::test();
+        Example9::CTRA_2::test();
+        Example9::CTRA_3::test();
+        Example9::CTRA_4::test();
+
+        Example9::CTRC_1::test();
+        Example9::CTRC_2::test();
+        Example9::CTRC_3::test();
+        Example9::CTRC_4::test();
+        Example9::CTRC_5::test();
+        Example9::CTRC_6::test();
     }
 
     return 0;
