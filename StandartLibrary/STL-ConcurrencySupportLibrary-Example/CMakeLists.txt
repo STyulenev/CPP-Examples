@@ -9,6 +9,7 @@ set(PROJECT_SOURCES
     main.cpp
 
     Example1.h # Threads
+    Example5.h # Mutual exclusion
 )
 
 add_executable(${PROJECT_NAME} ${PROJECT_SOURCES})
