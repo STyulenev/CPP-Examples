@@ -129,10 +129,11 @@ int main()
         Other::E15::test();
         Other::E16::test();
         Other::E17::test();
+        Other::E18::test();
     }
 
     // Ratio
-    {
+    /*{
         Example9::CTF_1::test();
 
         Example9::CTRA_1::test();
@@ -146,7 +147,7 @@ int main()
         Example9::CTRC_4::test();
         Example9::CTRC_5::test();
         Example9::CTRC_6::test();
-    }
+    }*/
 
     return 0;
 }
