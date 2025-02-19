@@ -713,4 +713,36 @@ void test()
 
 } // E17
 
+
+namespace E18 { // ------------------------------------ Наследование от нескольких lambda
+
+template<class Lambda1, class Lambda2 /*, ... */>
+struct Base : public Lambda1, public Lambda2
+{
+    Base(Lambda1 lambda1, Lambda2 lambda2) : Lambda1(std::move(lambda1)), Lambda2(std::move(lambda2)) {}
+
+    // Переопределили оператор (), чтобы вызывать лямбду через него.
+    using Lambda1::operator();
+    using Lambda2::operator();
+    // ...
+};
+
+void test()
+{
+    // Т.к. лямбда это класс, то можно от него наследоваться
+    auto lambda1 = [](int x) -> int {
+        return x;
+    };
+
+    auto lambda2 = [](double x) -> double {
+        return x;
+    };
+
+    Base b{lambda1, lambda2};
+    std::cout << "Lambda1: " << b(1) << std::endl;
+    std::cout << "Lambda2: " << b(1.1) << std::endl;
+}
+
+} // E18
+
 } // namespace Other
