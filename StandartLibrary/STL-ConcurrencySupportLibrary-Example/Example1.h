@@ -81,6 +81,36 @@ void test()
 
 
 
+namespace T2 { // ------------------------------------ jthread
+
+void func(int n)
+{
+    std::cout << "Thread id (func): " << std::this_thread::get_id() << std::endl;
+    std::this_thread::sleep_for(std::chrono::milliseconds(10));
+}
+
+// Пример с функцией в параллельном потоке (с ожиданием потока)
+void test_1()
+{
+    std::jthread t(func, 5);
+
+    std::cout << "Thread id (test_1): " << std::this_thread::get_id() << std::endl;
+
+    // Автоматический join вместо std::terminate
+}
+
+// Отличия:
+// - Для thread необходимо управление потоком, для jthread нет.
+// - При исключении в thread происходит утечка памяти, в jthread нет.
+void test()
+{
+    test_1();
+}
+
+} // namespace T2
+
+
+
 namespace T3 { // ------------------------------------ yield
 
 void func(bool status, int id)

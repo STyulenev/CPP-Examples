@@ -8,8 +8,10 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(PROJECT_SOURCES
     main.cpp
 
-    Example1.h # Threads
-    Example5.h # Mutual exclusion
+    Example1.h  # Threads
+    Example5.h  # Mutual exclusion
+    Example7.h  # Condition variables
+    Example10.h # Futures
 )
 
 add_executable(${PROJECT_NAME} ${PROJECT_SOURCES})
