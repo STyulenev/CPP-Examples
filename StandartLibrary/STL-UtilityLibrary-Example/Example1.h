@@ -1,13 +1,15 @@
 #pragma once
 
 #include <any>
-#include <expected>
+//#include <expected>
 #include <functional>
 #include <iostream>
 #include <optional>
 #include <utility>
 #include <variant>
 #include <tuple>
+
+#include <type_traits>
 
 /*
  * =======================================================================================================================================================================
@@ -186,6 +188,34 @@ void test()
 }
 
 } // namespace GPU1_2
+
+
+
+namespace GPU2_6 { // ----------------------------------- Type operations: declval
+
+struct Base1
+{
+    int foo() const { return 1; }
+};
+
+struct Base2
+{
+    Base2() = delete;
+    int foo() const { return 1; }
+};
+
+void test()
+{
+    decltype(Base1().foo())               n1 = 1; // Получить тип как у Base1().foo()
+    decltype(std::declval<Base1>().foo()) n2 = 1; // Получить тип как у Base1().foo()
+
+    // decltype(Base2().foo())            n3 = n1; // Ошибка
+    decltype(std::declval<Base2>().foo()) n3 = n1; // Получить тип как у Base2().foo()
+}
+
+} // namespace GPU2_6
+
+
 
 namespace GPU6_1 { // ----------------------------------- Pairs and tuples: pair
 
@@ -405,21 +435,21 @@ void test()
 
 namespace GPU7_2 { // ----------------------------------- Sum types and type erased wrappers: expected
 
-std::expected<int, double> check(bool status)
+/*std::expected<int, double> check(bool status)
 {
     if (status)
         return 1;
     else
         return std::unexpected(1.1);
-}
+}*/
 
 void test()
 {
-    auto result1 = check(true);
+    /*auto result1 = check(true);
     std::cout << "value = " << *result1 << std::endl;
 
     auto result2 = check(false);
-    std::cout << "value = " << result2.error() << std::endl;
+    std::cout << "value = " << result2.error() << std::endl;*/
 }
 
 } // namespace GPU7_2
