@@ -17,13 +17,15 @@ int main()
     {
         //Example5::MX1::test();
         //Example5::MX2::test();
+        Example5::MX3::test();
 
 
         //Example5::CO::test();
     }
 
     {
-        Example7::CV1::test();
+        //Example7::CV1::test();
+        //Example7::CV2::test();
     }
 
     {

@@ -1,12 +1,13 @@
 #pragma once
 
 #include <iostream>
-#include <thread>
 #include <mutex>
+#include <thread>
 
 /*
  * =======================================================================================================================================================================
- *                                                                           Mutual exclusion
+ *                                                                           Mutual
+ * exclusion
  * =======================================================================================================================================================================
  *
  * Mutual exclusion:
@@ -17,7 +18,7 @@
  * - shared_mutex
  * - shared_timed_mutex
  *
- * Generic mutex management
+ * Generic mutex management:
  * - lock_guard
  * - scoped_lock
  * - unique_lock
@@ -29,7 +30,7 @@
  * - try_to_lock_t
  * - adopt_lock_t
  *
- * Generic locking algorithms
+ * Generic locking algorithms:
  * - try_lock
  * - lock
  *
@@ -100,8 +101,6 @@ void test()
 
 } // namespace MX1
 
-
-
 namespace MX2 { // ------------------------------------ timed_mutex
 
 std::timed_mutex mutex;
@@ -135,6 +134,39 @@ void test()
 }
 
 } // namespace MX2
+
+
+
+namespace MX3 { // ------------------------------------ recursive_mutex
+
+std::recursive_mutex mutex;
+
+void func1(int num)
+{
+    std::lock_guard<std::recursive_mutex> lk(mutex);
+    std::cout << "funс1(), num = " << num << std::endl;
+}
+
+void func2(int num)
+{
+    std::lock_guard<std::recursive_mutex> lk(mutex);
+    std::cout << "funс2(), num = " << num << std::endl;
+
+    func1(num);
+
+    std::cout << "funс2(), num = " << num << std::endl;
+}
+
+void test()
+{
+    std::thread t1(func1, 1);
+    std::thread t2(func2, 2);
+
+    t1.join();
+    t2.join();
+}
+
+} // namespace MX3
 
 
 
