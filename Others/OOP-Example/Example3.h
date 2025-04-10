@@ -3,13 +3,13 @@
 #include <iostream>
 
 /*
- * Пример private наследование
+ * Пример protected наследование
  *
- * Private наследование в C++ означает, что все унаследованные данные базового класса становятся приватными в производном классе.
- * При таком наследовании данные базового класса доступны из методов производного класса, но недоступны извне, то есть они становятся private.
+ * Смысл protected-наследования в том, что если у производного класса будут свои классы-наследники, то в этих классах-наследниках
+ * также можно обращаться к подобным членам базового класса.
  *
  */
-namespace Example2 {
+namespace Example3 {
 
 class Base
 {
@@ -30,14 +30,14 @@ public:
         std::cout << "Base::method()" << std::endl;
     }
 
-private:
+protected:
     virtual void method1() {
         std::cout << "Base::method1()" << std::endl;
     }
 
 };
 
-class Derived : private Base
+class Derived : protected Base
 {
 public:
     Derived() : Base(5) {
@@ -49,13 +49,13 @@ public:
     }
 
     virtual void method() {
-        // Base::method(); // Работает
+        Base::method(); // Работает
 
         std::cout << "Derived::method()" << std::endl;
     }
 
     virtual void method1() {
-        //Base::method1(); // Ошибка, метод недоступен
+        Base::method1(); // Работает
 
         std::cout << "Derived::method1()" << std::endl;
     }
@@ -63,20 +63,20 @@ public:
 
 void test1()
 {
-    std::cout << "test1()\n" << std::endl;
+    std::cout << "\ntest1()\n" << std::endl;
 
     Base* b = new Base();
     b->method();
-    // b->method1(); // Ошибка, метод недоступен
+    //b->method1(); // Ошибка, метод недоступен
 
     delete b;
 }
 
 void test2()
 {
-    std::cout << "\ntest2()\n" << std::endl;
+    std::cout << "test2()\n" << std::endl;
 
-    // Base* d = new Derived(); // Ошибка
+    //Base* d = new Derived(); // Ошибка
     Derived* d = new Derived();
     // Base* b = dynamic_cast<Base*>(d); // Ошибка
     d->method();
@@ -85,4 +85,4 @@ void test2()
     delete d;
 }
 
-} // namespace Example2
+} // namespace Example3
