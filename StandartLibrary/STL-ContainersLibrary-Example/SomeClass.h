@@ -65,6 +65,18 @@ void printContainer(const Type& container)
     std::cout << std::endl;
 }
 
+template <class ForwardIter>
+void printContainer(ForwardIter begin, ForwardIter end)
+{
+    std::cout << "Print: ";
+
+    for (; begin != end; ++begin) {
+        std::cout << (*begin)->getField() << " ";
+    }
+
+    std::cout << std::endl;
+}
+
 template <typename Type, std::enable_if_t<is_map_type<Type>::value, bool> = true>
 void printMap(const Type& map)
 {
