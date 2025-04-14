@@ -1,6 +1,8 @@
 #include "Example1.h"
 #include "Example2.h"
 #include "Example3.h"
+#include "Example4.h"
+#include "Example5.h"
 
 int main()
 {
@@ -17,9 +19,19 @@ int main()
         Example2::test2();
     }*/
 
-    {
+    /*{
         Example3::test1();
         Example3::test2();
+    }*/
+
+    /*{
+        Example4::test1();
+    }*/
+
+    {
+        Example5::test1();
+        Example5::test2();
+        Example5::test3();
     }
 
     return 0;
