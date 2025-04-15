@@ -13,6 +13,9 @@ public:
     Facade(SubSystem1* subsystem1 = nullptr, SubSystem2* subsystem2 = nullptr);
     ~Facade();
 
+    /*
+     * Текущий метод просто вызывает последовательно все методы подсистем и возвращает общий результат строк.
+     */
     std::string operations();
 
 };
