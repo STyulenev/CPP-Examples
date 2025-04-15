@@ -3,8 +3,8 @@
 #include "SharedState.h"
 #include "UniqueState.h"
 
-/*!
- * \brief Класс-легковес хранит общую часть состояния, которая принадлежит нескольким реальным бизнес-объектам
+/*
+ * Класс-легковес хранит общую часть состояния, которая принадлежит нескольким реальным бизнес-объектам
  * и принимает уникальную часть объекта.
  */
 class Flyweight
@@ -13,6 +13,7 @@ private:
     SharedState* sharedState_;
 
 public:
+    Flyweight() = delete;
     Flyweight(const SharedState* sharedState);
     Flyweight(const Flyweight& other);
     ~Flyweight();

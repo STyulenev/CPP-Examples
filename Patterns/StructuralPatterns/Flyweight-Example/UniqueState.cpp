@@ -6,3 +6,8 @@ UniqueState::UniqueState(const std::string& owner, const std::string& plates) :
 {
     // ...
 }
+
+UniqueState::~UniqueState()
+{
+    // ...
+}

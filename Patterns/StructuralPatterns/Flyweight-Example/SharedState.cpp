@@ -7,3 +7,8 @@ SharedState::SharedState(const std::string &brand, const std::string &model, con
 {
     // ...
 }
+
+SharedState::~SharedState()
+{
+    // ...
+}
