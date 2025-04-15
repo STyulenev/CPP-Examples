@@ -6,6 +6,11 @@ ConcreteDecoratorB::ConcreteDecoratorB(AbstractComponent* component) :
     // ...
 }
 
+ConcreteDecoratorB::~ConcreteDecoratorB()
+{
+    // ...
+}
+
 std::string ConcreteDecoratorB::operation() const
 {
     return "ConcreteDecoratorB(" + Decorator::operation() + ")";

@@ -6,7 +6,13 @@ Decorator::Decorator(AbstractComponent* component) :
     // ...
 }
 
+Decorator::~Decorator()
+{
+    // ...
+}
+
+// Пример минимальной обёртки
 std::string Decorator::operation() const
 {
-    return this->component_->operation();
+    return "Decorator: " + this->component_->operation();
 }

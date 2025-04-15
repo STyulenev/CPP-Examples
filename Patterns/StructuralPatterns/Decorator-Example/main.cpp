@@ -5,6 +5,10 @@
 #include "ConcreteDecoratorA.h"
 #include "ConcreteDecoratorB.h"
 
+/*
+ * Декоратор — это структурный паттерн, который позволяет добавлять объектам новые поведения на лету, помещая их в объекты-обёртки.
+ */
+
 void clientCode(AbstractComponent* component)
 {
     // ...
@@ -15,13 +19,13 @@ void clientCode(AbstractComponent* component)
 int main()
 {
     AbstractComponent* simple = new ConcreteComponent();
-    std::cout << "Client: I've got a simple component:" << std::endl;
-    clientCode(simple);
 
-    AbstractComponent* decorator1 = new ConcreteDecoratorA(simple);
-    AbstractComponent* decorator2 = new ConcreteDecoratorB(decorator1);
-    std::cout << "Client: Now I've got a decorated component:" << std::endl;
-    clientCode(decorator2);
+    clientCode(simple); // Простой компонент
+
+    AbstractComponent* decorator1 = new ConcreteDecoratorA(simple);     // Добавили обёртку
+    AbstractComponent* decorator2 = new ConcreteDecoratorB(decorator1); // Добавили обёртку
+
+    clientCode(decorator2); // Усложнённый компонент
 
     delete simple;
     delete decorator1;
