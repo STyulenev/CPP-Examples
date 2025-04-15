@@ -2,16 +2,6 @@
 
 #include <iostream>
 
-void Proxy::actionBefore() const
-{
-    std::cout << "Proxy: [ ";
-}
-
-void Proxy::actionAfter() const
-{
-    std::cout << " ]";
-}
-
 Proxy::Proxy(RealSubject* realSubject) :
     realSubject_(new RealSubject(*realSubject))
 {
@@ -30,4 +20,14 @@ void Proxy::someAction() const
     this->realSubject_->someAction();
     // ...
     this->actionAfter();
+}
+
+void Proxy::actionBefore() const
+{
+    std::cout << "Proxy: [ ";
+}
+
+void Proxy::actionAfter() const
+{
+    std::cout << " ]";
 }

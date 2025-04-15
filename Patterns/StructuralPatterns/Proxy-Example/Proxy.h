@@ -2,8 +2,8 @@
 
 #include "RealSubject.h"
 
-/*!
- * \brief Класс-заместитель для реального объекта
+/*
+ * Класс-заместитель для реального объекта
  */
 class Proxy : public AbstractSubject
 {
@@ -14,9 +14,14 @@ public:
     Proxy(RealSubject* realSubject);
     ~Proxy();
 
+    // Отнаследовали методы AbstractSubject
     void someAction() const override;
+    // ...
 
 private:
+    /*
+     * Дополнительные методы
+     */
     void actionBefore() const;
     void actionAfter() const;
 

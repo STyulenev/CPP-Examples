@@ -2,14 +2,17 @@
 
 #include "AbstractSubject.h"
 
-/*!
- * \brief Переопределённый класс реального объекта
+/*
+ * Переопределённый класс реального объекта
  */
 class RealSubject : public AbstractSubject
 {
 public:
-    /*!
-     * \brief Переопределённый метод someAction
+    RealSubject();
+    ~RealSubject();
+
+    /*
+     * Переопределённый метод someAction
      */
     void someAction() const override;
 
