@@ -11,7 +11,7 @@ class Base
 {
 public:
     Base() {
-        //std::cout << "Base::Base(int a)" << std::endl;
+        //std::cout << "Base::Base()" << std::endl;
     }
 
     virtual ~Base() {

@@ -3,6 +3,8 @@
 #include "Example3.h"
 #include "Example4.h"
 #include "Example5.h"
+#include "Example6.h"
+#include "Example7.h"
 
 int main()
 {
@@ -28,11 +30,23 @@ int main()
         Example4::test1();
     }*/
 
-    {
+    /*{
         Example5::test1();
         Example5::test2();
         Example5::test3();
+    }*/
+
+    {
+        Example6::test1();
+        Example6::test2();
+        Example6::test3();
+        Example6::test4();
     }
+
+    /*{
+        Example7::test1();
+        Example7::test2();
+    }*/
 
     return 0;
 }
