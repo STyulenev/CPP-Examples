@@ -15,6 +15,8 @@ set(PROJECT_SOURCES
     Example5.h
     Example6.h
     Example7.h
+    Example8.h
+    Example9.h
 )
 
 add_executable(${PROJECT_NAME} ${PROJECT_SOURCES})
