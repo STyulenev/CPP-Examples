@@ -7,6 +7,7 @@
 #include "Example7.h"
 #include "Example8.h"
 #include "Example9.h"
+#include "Example10.h"
 
 int main()
 {
@@ -57,9 +58,15 @@ int main()
         Example8::test4();
     }*/
 
-    {
+    /*{
         Example9::test1();
         Example9::test2();
+    }*/
+
+    {
+        Example10::test1();
+        Example10::test2();
+        Example10::test3();
     }
 
     return 0;
