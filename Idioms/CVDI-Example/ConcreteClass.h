@@ -27,7 +27,12 @@ private:
 template<class ClassType, class Parameter>
 std::unique_ptr<AbstractBase> factory(Parameter parameter)
 {
-    std::unique_ptr<AbstractBase> uptr(new ClassType(parameter));
-    uptr->initialization();
-    return uptr;
+    try {
+        // std::unique_ptr<AbstractBase> uptr(new ClassType(parameter));
+        std::unique_ptr<AbstractBase> uptr = std::make_unique<ClassType>(parameter);
+        uptr->initialization();
+        return uptr;
+    } catch (...) {
+        return nullptr;
+    }
 }
