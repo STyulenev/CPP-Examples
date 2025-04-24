@@ -15,6 +15,17 @@
  *
  * Базовый класс обязательно следует помечать как virtual для корректного освобождения ресурсов, а деструкторы наследников
  * можно помечать как virtual или как override (одновременно не работает).
+ *
+ * Если деструктор помечен как virtual только в последнем наследнике, то:
+ *  - Derived2* d = new Derived2() - вызовутся все деструкторы;
+ *  - Derived1* d = new Derived2() - не вызовется деструктор Derived2;
+ *  - Base* b = new Derived2() - вызовется только деструктор Base;
+ *
+ * Если деструктор помечен как virtual только в базовом классе, то всё удалится корректно.
+ *
+ * Если деструктор помечен как virtual только в последнем наследнике, то всё удалиться корректно т.к. только 3 класса, если добавить
+ * ещё наследников, то не все будут вызываться деструкторы.
+ *
  */
 namespace Example8 {
 
@@ -25,7 +36,7 @@ public:
         std::cout << "Base::Base()" << std::endl;
     }
 
-    /* virtual */ ~Base()  {
+    virtual ~Base()  {
         std::cout << "Base::~Base()" << std::endl;
     }
 
@@ -38,7 +49,7 @@ public:
         std::cout << "Derived1::Derived1()" << std::endl;
     }
 
-    /* virtual */ ~Derived1() /* override */ {
+    /* virtual */  ~Derived1() /* override */ {
         std::cout << "Derived1::~Derived1()" << std::endl;
     }
 };
@@ -110,6 +121,23 @@ void test4()
     Base* b = new Derived2();
 
     delete b;
+
+    /*
+     * Base::Base()
+     * Derived1::Derived1()
+     * Derived2::Derived2()
+     * Derived1::~Derived1()
+     * Base::~Base()
+     */
+}
+
+void test5()
+{
+    std::cout << "\ntest5()\n" << std::endl;
+
+    Derived2* d = new Derived2();
+
+    delete d;
 
     /*
      * Base::Base()

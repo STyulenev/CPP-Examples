@@ -51,23 +51,24 @@ int main()
         Example7::test2();
     }*/
 
-    /*{
+    {
         Example8::test1();
         Example8::test2();
         Example8::test3();
         Example8::test4();
-    }*/
+        Example8::test5();
+    }
 
     /*{
         Example9::test1();
         Example9::test2();
     }*/
 
-    {
+    /*{
         Example10::test1();
         Example10::test2();
         Example10::test3();
-    }
+    }*/
 
     return 0;
 }
