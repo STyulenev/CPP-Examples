@@ -1,6 +1,7 @@
-#include <iostream>
-
-#include "SomeClass.h"
+#include "Example1.h"
+#include "Example2.h"
+#include "Example3.h"
+#include "Example4.h"
 
 /*
  * Move-семантика в C++ позволяет избежать копирования объектов путём передачи ресурсов от одного объекта к другому. Используется
@@ -10,47 +11,31 @@
  *
  */
 
-void func1([[maybe_unused]] SomeClass someClass)
-{
-    std::cout << "func #1" << std::endl;
-}
-
-void func2([[maybe_unused]] SomeClass& someClass)
-{
-    std::cout << "func #2" << std::endl;
-}
-
-void func3([[maybe_unused]] SomeClass&& someClass)
-{
-    std::cout << "func #3" << std::endl;
-}
-
 int main()
 {
-    {
-        SomeClass someClass;
-        func1(someClass);
-    }
+    /*{
+        Example1::test1();
+        Example1::test2();
+        Example1::test3();
+        Example1::test4();
+    }*/
 
-    std::cout << std::endl;
+    /*{
+        Example2::test1();
+        Example2::test2();
+    }*/
 
-    {
-        SomeClass someClass;
-        func1(std::move(someClass));
-    }
-
-    std::cout << std::endl;
-
-    {
-        SomeClass someClass;
-        func2(someClass);
-    }
-
-    std::cout << std::endl;
+    /*{
+        Example3::test1();
+        Example3::test2();
+        Example3::test3();
+    }*/
 
     {
-        SomeClass someClass;
-        func3(std::move(someClass));
+        Example4::test1();
+        Example4::test2();
+        Example4::test3();
+        Example4::test4();
     }
 
     return 0;

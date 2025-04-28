@@ -18,6 +18,11 @@ endif()
 set(PROJECT_SOURCE
     main.cpp
 
+    Example1.h
+    Example2.h
+    Example3.h
+    Example4.h
+
     SomeClass.h
     SomeClass.cpp
 )
