@@ -1,4 +1,5 @@
 #include "Example1.h"
+#include "Example2.h"
 
 /*
  * Некоторые случаи использования ключевого слова inline:
@@ -20,6 +21,12 @@ int main()
     Example1::test2();
     Example1::test3();
     Example1::test4();
+
+    Example2::test1();
+    Example2::test2();
+    Example2::test3();
+    Example2::test4();
+    Example2::test5();
 
     return 0;
 }
