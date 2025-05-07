@@ -15,6 +15,8 @@
  * - Для const volatile и не const volatile объектов + типизация шаблона.
  * - Различное количество аргументов.
  * - Различные типы аргументов.
+ * - Различные уровни указателя
+ * - Различная передача [ссылка, указатель, ссылка на эказатель, rvalue/lvalue, +const, +volatile, ... ]
  *
  */
 
@@ -40,6 +42,8 @@ struct SomeClass {
     // void foo() & noexcept  // Ошибка, noexcept не перегружает функцию/метод
     // static void foo() & {} // Ошибка, static не перегружает функцию/метод
     // inline void foo() & {} // Ошибка, inline не перегружает функцию/метод
+
+    // Перегрузка метода без параметров
 
     void foo() & {
         std::cout << "void foo() &" << std::endl;
@@ -73,6 +77,8 @@ struct SomeClass {
         std::cout << "void foo() const volatile &&" << std::endl;
     }
 
+    // Перегрузка метода с параметром
+
     void foo(int x) {
         std::cout << "void foo(int x)" << std::endl;
     }
@@ -80,6 +86,49 @@ struct SomeClass {
     // void foo(const int x) {}          // Ошибка, это равнозначно void foo(int x) т.к. const удаляется из-за передачи по значению
     // void foo(const volatile int x) {} // Ошибка, это равнозначно т.к. const volatile удаляется из-за передачи по значению
     // long long int foo(int x) {}       // Ошибка, нельзя перегружать по возвращаемому значению
+
+    void foo(int* x) {
+        std::cout << "void foo(int* x)" << std::endl;
+    }
+
+    void foo(int** x) {
+        std::cout << "void foo(int** x)" << std::endl;
+    }
+
+    void foo(int*& x) {
+        std::cout << "void foo(int* x)" << std::endl;
+    }
+
+    void foo(int& x) {
+        std::cout << "void foo(int& x)" << std::endl;
+    }
+
+    void foo(int&& x) {
+        std::cout << "void foo(int&& x)" << std::endl;
+    }
+
+    void foo(const int& x) {
+        std::cout << "void foo(const int& x)" << std::endl;
+    }
+
+    void foo(const int&& x) {
+        std::cout << "void foo(const int&& x)" << std::endl;
+    }
+
+    void foo(const volatile int& x) {
+        std::cout << "void foo(const volatile int& x)" << std::endl;
+    }
+
+    void foo(const volatile int&& x) {
+        std::cout << "void foo(const volatile int&& x)" << std::endl;
+    }
+
+    // Ко всем вышеперечисленным методам можно добавить & / && / const / volatile, как в примерах выше
+    // Количестов аргументов может быть увеличено
+    // Количество уровеней указателя может быть любым
+    // Может быть ссылка на указатель
+
+    // Перегрузка метода шаблоном
 
     template<typename T>
     void foo() & {
