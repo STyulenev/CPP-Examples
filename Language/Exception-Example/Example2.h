@@ -44,4 +44,19 @@ void test1()
     }
 }
 
+/*
+ * При исключение из деструктора с меткой noexcept(false) объект удалится если стек успел "размататься".
+ * Иначе произойдёт std::terminate.
+ */
+void test2()
+{
+    try {
+        A a;
+    } catch (const std::exception& error) {
+        std::cout << error.what() << std::endl;
+    } catch (...) {
+        std::cout << "Unknown exception" << std::endl;
+    }
+}
+
 } // namespace Example2

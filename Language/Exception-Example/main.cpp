@@ -11,7 +11,8 @@ int  main()
     }
 
     {
-        Example2::test1();
+        // Example2::test1();
+        Example2::test2();
     }
 
     return  0;
