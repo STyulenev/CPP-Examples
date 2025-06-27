@@ -1,6 +1,9 @@
 #pragma once
 
 #include <memory>
+#include <iostream>
+#include <chrono>
+#include <ctime>
 
 template <typename T>
 using sptr = std::shared_ptr<T>;
@@ -46,3 +49,13 @@ public:            \
     void doTask(); \
 };
 #endif
+
+
+
+// Функция определения максимального значения
+#define MAX(a, b) ({decltype(a) _a = (a); decltype(b) _b = (b); _a > _b ? _a : _b; })
+
+
+
+// Пример лога
+#define PROGRAMM_LOG(text) std::cout << "line: " <<__LINE__ << ", function: " << __FUNCTION__ << ", log: " << text << std::endl

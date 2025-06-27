@@ -1,7 +1,5 @@
 #include "Example1.h"
 
-#include <iostream>
-
 namespace Example1 {
 
 MyClass2::MyClass2()
