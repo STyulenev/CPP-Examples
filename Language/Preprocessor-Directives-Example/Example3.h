@@ -1,6 +1,9 @@
 #pragma once
 
+#define NDEBUG // Отключили asserts
+
 #include <iostream>
+#include <cassert>
 
 /*
  *
@@ -23,6 +26,8 @@
 #define MESSAGE(s) std::cout << #s << std::endl;
 
 #define DIDGITALSUM(a, b) a##b
+
+#define FOREVER for(;;)
 
 namespace Example3 {
 
@@ -65,14 +70,74 @@ void test3()
 #endif
 }
 
+// Пример #
 void test4()
 {
     MESSAGE(This is log)
 }
 
+// Пример ##
 void test5()
 {
     std::cout << DIDGITALSUM(2, 5) << std::endl;
+}
+
+// Пример отключение asserts
+void test6()
+{
+    assert(false);
+}
+
+// Пример #error
+void test7()
+{
+#ifndef _WIN32
+#error "Only Windows"
+#endif
+}
+
+// Пример #undef
+void test8()
+{
+#define E 2.71828
+
+    int sumE = E + E;
+
+#undef E // Отключение макроса
+
+    //int sumE2 = E + E; // error
+}
+
+// Проверить версию C++ в коде
+void test9()
+{
+
+    std::cout << "C++ " << __cplusplus << std::endl;
+
+#if __cplusplus == 202602L // ?
+    std::cout << "It's C++26" << std::endl;
+#elif __cplusplus == 202100
+    std::cout << "It's C++23" << std::endl;
+#elif __cplusplus == 202002L
+    std::cout << "It's C++20" << std::endl;
+#elif __cplusplus == 201703L
+    std::cout << "It's C++17" << std::endl;
+#elif __cplusplus == 201402L
+    std::cout << "It's C++14" << std::endl;
+#elif __cplusplus == 201103L
+    std::cout << "It's C++11" << std::endl;
+#else
+    std::cout << "It's C++" << std::endl;
+#endif
+}
+
+// Бесконечный цикл
+void test10()
+{
+    FOREVER
+    {
+        break;
+    }
 }
 
 } // namespace Example3

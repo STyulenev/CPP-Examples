@@ -24,6 +24,8 @@ int main()
     {
         Example3::test4();
         Example3::test5();
+        Example3::test6();
+        Example3::test9();
     }
 
     return 0;
