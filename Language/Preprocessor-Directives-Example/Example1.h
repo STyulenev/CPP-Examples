@@ -2,6 +2,12 @@
 
 #include "Definations.h"
 
+/*
+ *
+ * Примеры пользовательских препроцессорных директив
+ *
+ */
+
 namespace Example1 {
 
 FWD_DCL(MyClass)
@@ -36,7 +42,7 @@ inline void test3()
 
 inline void test4()
 {
-    PROGRAMM_LOG("inline void test3()");
+    PROGRAMM_LOG("inline void test4()");
 
     REGISTER_ENUM_VALUE(MyEnum, one, two, three);
     REGISTER_ENUM(MyEnum, one, two, three);
