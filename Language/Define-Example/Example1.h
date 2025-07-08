@@ -2,7 +2,6 @@
 
 #include "Definations.h"
 
-
 namespace Example1 {
 
 FWD_DCL(MyClass)
@@ -33,6 +32,27 @@ inline void test3()
     PROGRAMM_LOG("inline void test3()");
 
     std::cout << "MAX(1, 2) = " << MAX(1, 2) << std::endl;
+}
+
+inline void test4()
+{
+    PROGRAMM_LOG("inline void test3()");
+
+    REGISTER_ENUM_VALUE(MyEnum, one, two, three);
+    REGISTER_ENUM(MyEnum, one, two, three);
+
+    START_SWITCH (MyEnum::fromStr("two"))
+    //case MyEnum::UNKNOWN:
+    case MyEnum::one:
+        std::cout << "one" << std::endl;
+        break;
+    case MyEnum::two:
+        std::cout << "two" << std::endl;
+        break;
+    case MyEnum::three:
+        std::cout << "three" << std::endl;
+        break;
+    STOP_SWITCH
 }
 
 struct MyClass
