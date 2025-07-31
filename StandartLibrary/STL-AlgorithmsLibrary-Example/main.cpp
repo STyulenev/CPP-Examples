@@ -1,6 +1,8 @@
 #include "Example1.h"
 #include "Example2.h"
 
+#include "Other.h"
+
 int main()
 {
     {
@@ -19,6 +21,17 @@ int main()
         //Example2::SO6::test();
         //Example2::SO7::test();
         //Example2::SO8::test();
+        //Example2::SO9::test();
+        //Example2::SO10::test();
+        //Example2::SO11::test();
+        //Example2::SO12::test();
+        //Example2::SO13::test();
+        //Example2::SO14::test();
+        Example2::SO15::test();
+    }
+
+    {
+        //Other::EX1::test();
     }
 
     return 0;

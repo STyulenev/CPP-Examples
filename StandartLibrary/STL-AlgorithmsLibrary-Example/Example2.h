@@ -248,6 +248,182 @@ void test()
 
 
 
+namespace SO9 { // ------------------------------------ find (ищет первое вхождение эталонного элемента)
 
+void test()
+{
+    std::vector<MyClass> v{
+        { 1, "name1" },
+        { 2, "name2" },
+        { 3, "name3" },
+        { 4, "name4" }
+    };
+
+    auto it = std::find(v.begin(), v.end(), MyClass{ 1, "name1" });
+
+    std::cout << (it != v.end() ? "Ok" : "Error") << std::endl;
+}
+
+} // namespace SO9
+
+
+
+namespace SO10 { // ------------------------------------ find_if (ищет первое вхождение элемента по условию)
+
+void test()
+{
+    std::vector<MyClass> v{
+        { 1, "name1" },
+        { 2, "name2" },
+        { 3, "name3" },
+        { 4, "name4" }
+    };
+
+    auto it = std::find_if(v.begin(), v.end(), [](const MyClass& mc) -> bool {
+        return mc.id == 2 && mc.name == "name2";
+    });
+
+    if (it != v.end())
+    {
+        std::cout << "Ok" << std::endl;
+        std::cout << "{ id: " << it->id << ", name: " << it->name << " }" << std::endl;
+    }
+    else
+    {
+        std::cout << "Error" << std::endl;
+    }
+}
+
+} // namespace SO10
+
+
+
+namespace SO11 { // ------------------------------------ find_if_not (ищет первое вхождение элемента по условию с не)
+
+void test()
+{
+    std::vector<MyClass> v{
+        { 1, "name1" },
+        { 2, "name2" },
+        { 3, "name3" },
+        { 4, "name4" }
+    };
+
+    auto it = std::find_if_not(v.begin(), v.end(), [](const MyClass& mc) -> bool {
+        return mc.id == 1 || mc.name == "name2";
+    });
+
+    if (it != v.end())
+    {
+        std::cout << "Ok" << std::endl;
+        std::cout << "{ id: " << it->id << ", name: " << it->name << " }" << std::endl;
+    }
+    else
+    {
+        std::cout << "Error" << std::endl;
+    }
+}
+
+} // namespace SO11
+
+
+
+namespace SO12 { // ------------------------------------ ranges::find (ищет первое вхождение эталонного элемента)
+
+void test()
+{
+    std::vector<MyClass> v{
+        { 1, "name1" },
+        { 2, "name2" },
+        { 3, "name3" },
+        { 4, "name4" }
+    };
+
+    auto it = std::ranges::find(v, MyClass{ 1, "name1" });
+
+    std::cout << (it != v.end() ? "Ok" : "Error") << std::endl;
+}
+
+} // namespace SO12
+
+
+
+namespace SO13 { // ------------------------------------ ranges::find_if (ищет первое вхождение элемента по условию)
+
+void test()
+{
+    std::vector<MyClass> v{
+        { 1, "name1" },
+        { 2, "name2" },
+        { 3, "name3" },
+        { 4, "name4" }
+    };
+
+    auto it = std::ranges::find_if(v, [](const MyClass& mc) -> bool {
+        return mc.id == 2 && mc.name == "name2";
+    });
+
+    if (it != v.end())
+    {
+        std::cout << "Ok" << std::endl;
+        std::cout << "{ id: " << it->id << ", name: " << it->name << " }" << std::endl;
+    }
+    else
+    {
+        std::cout << "Error" << std::endl;
+    }
+}
+
+} // namespace SO13
+
+
+
+namespace SO14 { // ------------------------------------ ranges::find_if_not (ищет первое вхождение элемента по условию)
+
+void test()
+{
+    std::vector<MyClass> v{
+        { 1, "name1" },
+        { 2, "name2" },
+        { 3, "name3" },
+        { 4, "name4" }
+    };
+
+    auto it = std::ranges::find_if_not(v, [](const MyClass& mc) -> bool {
+        return mc.id == 1 || mc.name == "name2";
+    });
+
+    if (it != v.end())
+    {
+        std::cout << "Ok" << std::endl;
+        std::cout << "{ id: " << it->id << ", name: " << it->name << " }" << std::endl;
+    }
+    else
+    {
+        std::cout << "Error" << std::endl;
+    }
+}
+
+} // namespace SO14
+
+
+
+namespace SO15 { // ------------------------------------ ranges::find_last (ищет последнее вхождение элемента по условию)
+
+void test()
+{
+    std::vector<MyClass> v{
+        { 1, "name1" }, // #0
+        { 1, "name1" }, // #1
+        { 1, "name1" }, // #2
+        { 4, "name4" }  // #3
+    };
+
+    auto it = std::ranges::find_last(v, MyClass{ 1, "name1" });
+
+    std::cout << (std::ranges::distance(v.begin(), it.begin()) == 2 ? "Ok" : "Error") << std::endl;
+}
+
+} // namespace SO15
 
 } // namespace Example2
