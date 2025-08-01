@@ -62,7 +62,21 @@ inline bool operator==(const MyClass& lhs, const MyClass& rhs) {
     return lhs.id == rhs.id && lhs.name == rhs.name;
 }
 
+inline bool operator>(const MyClass& lhs, const MyClass& rhs) {
+    return lhs.id > rhs.id;
+}
 
+inline bool operator<(const MyClass& lhs, const MyClass& rhs) {
+    return lhs.id < rhs.id;
+}
+
+inline bool operator>=(const MyClass& lhs, const MyClass& rhs) {
+    return lhs.id >= rhs.id;
+}
+
+inline bool operator<=(const MyClass& lhs, const MyClass& rhs) {
+    return lhs.id <= rhs.id;
+}
 
 namespace SO1 { // ------------------------------------ all_of (проверяет, что все элементы подходят под условие)
 
@@ -408,7 +422,7 @@ void test()
 
 
 
-namespace SO15 { // ------------------------------------ ranges::find_last (ищет последнее вхождение элемента по условию)
+namespace SO15 { // ------------------------------------ ranges::find_last (ищет последнее вхождение элемента по эталону)
 
 void test()
 {
@@ -425,5 +439,566 @@ void test()
 }
 
 } // namespace SO15
+
+
+
+namespace SO16 { // ------------------------------------ ranges::find_last_if (ищет последнее вхождение элемента по условию)
+
+void test()
+{
+    std::vector<MyClass> v{
+        { 1, "name1" }, // #0
+        { 1, "name1" }, // #1
+        { 1, "name1" }, // #2
+        { 4, "name4" }  // #3
+    };
+
+    auto it = std::ranges::find_last_if(v, [](const MyClass& mc) -> bool {
+        return mc.id == 1 && mc.name == "name1";
+    });
+
+    int id = std::ranges::distance(v.begin(), it.begin());
+
+    if (id != v.size())
+    {
+        std::cout << "Ok" << std::endl;
+        std::cout << "{ id: " << v.at(id).id << ", name: " << v.at(id).name << " }" << std::endl;
+    }
+    else
+    {
+        std::cout << "Error" << std::endl;
+    }
+}
+
+} // namespace SO16
+
+
+
+namespace SO17 { // ------------------------------------ ranges::find_last_if_not (ищет последнее вхождение элемента по условию + НЕ)
+
+void test()
+{
+    std::vector<MyClass> v{
+        { 1, "name1" }, // #0
+        { 1, "name1" }, // #1
+        { 1, "name1" }, // #2
+        { 4, "name4" }  // #3
+    };
+
+    auto it = std::ranges::find_last_if_not(v, [](const MyClass& mc) -> bool {
+        return mc.id == 1 && mc.name == "name1";
+    });
+
+    int id = std::ranges::distance(v.begin(), it.begin());
+
+    if (id != v.size())
+    {
+        std::cout << "Ok" << std::endl;
+        std::cout << "{ id: " << v.at(id).id << ", name: " << v.at(id).name << " }" << std::endl;
+    }
+    else
+    {
+        std::cout << "Error" << std::endl;
+    }
+}
+
+} // namespace SO17 find_end
+
+
+
+
+namespace SO18 { // ------------------------------------ find_end (ищет последнее вхождение поддиапазона в диапазоне)
+
+void test()
+{
+    std::vector<MyClass> v1{
+        { 1, "name1" },
+        { 2, "name2" },
+        { 3, "name3" },
+        { 2, "name2" },
+        { 3, "name3" },
+        { 4, "name4" },
+        { 5, "name5" }
+    };
+
+    std::vector<MyClass> v2{
+        { 2, "name2" },
+        { 3, "name3" }
+    };
+
+    auto it = std::find_end(v1.cbegin(), v1.cend(), v2.cbegin(), v2.cend());
+
+    if (it != v1.end())
+    {
+        std::cout << "Ok" << std::endl;
+        std::cout << "{ id: " << it->id << ", name: " << it->name << " }" << std::endl;
+    }
+    else
+    {
+        std::cout << "Error" << std::endl;
+    }
+}
+
+} // namespace SO18
+
+
+
+namespace SO19 { // ------------------------------------ ranges::find_end (ищет последнее вхождение поддиапазона в диапазоне)
+
+void test()
+{
+    std::vector<MyClass> v1{
+        { 1, "name1" },
+        { 2, "name2" },
+        { 3, "name3" },
+        { 2, "name2" },
+        { 3, "name3" },
+        { 4, "name4" },
+        { 5, "name5" }
+    };
+
+    std::vector<MyClass> v2{
+        { 2, "name2" },
+        { 3, "name3" }
+    };
+
+    auto it = std::ranges::find_end(v1, v2);
+
+    int id = std::ranges::distance(v1.begin(), it.begin());
+
+    if (id != v1.size())
+    {
+        std::cout << "Ok" << std::endl;
+        std::cout << "{ id: " << v1.at(id).id << ", name: " << v1.at(id).name << " }" << std::endl;
+    }
+    else
+    {
+        std::cout << "Error" << std::endl;
+    }
+}
+
+} // namespace SO19
+
+
+
+namespace SO20 { // ------------------------------------ find_first_of (ищет первое вхождение поддиапазона в диапазоне)
+
+void test()
+{
+    std::vector<MyClass> v1{
+        { 1, "name1" },
+        { 2, "name2" },
+        { 3, "name3" },
+        { 2, "name2" },
+        { 3, "name3" },
+        { 4, "name4" },
+        { 5, "name5" }
+    };
+
+    std::vector<MyClass> v2{
+        { 2, "name2" },
+        { 3, "name3" }
+    };
+
+    auto it = std::find_first_of(v1.cbegin(), v1.cend(), v2.cbegin(), v2.cend());
+
+    if (it != v1.end())
+    {
+        std::cout << "Ok" << std::endl;
+        std::cout << "{ id: " << it->id << ", name: " << it->name << " }" << std::endl;
+    }
+    else
+    {
+        std::cout << "Error" << std::endl;
+    }
+}
+
+} // namespace SO20
+
+
+
+namespace SO21 { // ------------------------------------ ranges::find_first_of (ищет первое вхождение поддиапазона в диапазоне)
+
+void test()
+{
+    std::vector<MyClass> v1{
+        { 1, "name1" },
+        { 2, "name2" },
+        { 3, "name3" },
+        { 2, "name2" },
+        { 3, "name3" },
+        { 4, "name4" },
+        { 5, "name5" }
+    };
+
+    std::vector<MyClass> v2{
+        { 2, "name2" },
+        { 3, "name3" }
+    };
+
+    auto it = std::ranges::find_first_of(v1, v2);
+
+    if (it.base() != nullptr)
+    {
+        std::cout << "Ok" << std::endl;
+        std::cout << "{ id: " << it->id << ", name: " << it->name << " }" << std::endl;
+    }
+    else
+    {
+        std::cout << "Error" << std::endl;
+    }
+}
+
+} // namespace SO21
+
+
+
+namespace SO22 { // ------------------------------------ adjacent_find (ищет первые два соседних элемента подходящие под == < > <= >=)
+
+void test()
+{
+    std::vector<MyClass> v{
+        { 1, "name1" },
+        { 2, "name2" },
+        { 3, "name3" },
+        { 2, "name2" },
+        { 2, "name2" },
+        { 4, "name4" },
+        { 5, "name5" }
+    };
+
+    //auto it = std::adjacent_find(v.cbegin(), v.cend());
+    //auto it = std::adjacent_find(v.cbegin(), v.cend(), std::greater<MyClass>());
+    //auto it = std::adjacent_find(v.cbegin(), v.cend(), std::less<MyClass>());
+    //auto it = std::adjacent_find(v.cbegin(), v.cend(), std::less_equal<MyClass>());
+    auto it = std::adjacent_find(v.cbegin(), v.cend(), std::greater_equal<MyClass>());
+
+    if (it != v.end())
+    {
+        std::cout << "Ok" << std::endl;
+        std::cout << "{ id: " << it->id << ", name: " << it->name << " }" << std::endl;
+    }
+    else
+    {
+        std::cout << "Error" << std::endl;
+    }
+}
+
+} // namespace SO22
+
+
+
+namespace SO23 { // ------------------------------------ ranges::adjacent_find (ищет первые два соседних элемента подходящие под == < > <= >=)
+
+void test()
+{
+    std::vector<MyClass> v{
+        { 1, "name1" },
+        { 2, "name2" },
+        { 3, "name3" },
+        { 2, "name2" },
+        { 2, "name2" },
+        { 4, "name4" },
+        { 5, "name5" }
+    };
+
+    //auto it = std::adjacent_find(v.cbegin(), v.cend());
+    //auto it = std::adjacent_find(v.cbegin(), v.cend(), std::greater<MyClass>());
+    //auto it = std::adjacent_find(v.cbegin(), v.cend(), std::less<MyClass>());
+    //auto it = std::adjacent_find(v.cbegin(), v.cend(), std::less_equal<MyClass>());
+    auto it = std::ranges::adjacent_find(v, std::greater_equal<MyClass>());
+
+    if (it != v.end())
+    {
+        std::cout << "Ok" << std::endl;
+        std::cout << "{ id: " << it->id << ", name: " << it->name << " }" << std::endl;
+    }
+    else
+    {
+        std::cout << "Error" << std::endl;
+    }
+}
+
+} // namespace SO23
+
+
+
+namespace SO24 { // ------------------------------------ count (считает количество элементов по эталону)
+
+void test()
+{
+    std::vector<MyClass> v{
+       { 1, "name1" },
+       { 2, "name2" },
+       { 3, "name3" },
+       { 2, "name2" },
+       { 2, "name2" },
+       { 4, "name4" },
+       { 5, "name5" }
+    };
+
+    int result = std::count(v.cbegin(), v.cend(), MyClass{ 2, "name2" });
+
+    std::cout << "count = " << result << std::endl;
+}
+
+} // namespace S24
+
+
+
+namespace SO25 { // ------------------------------------ count_if (считает количество элементов по условию)
+
+void test()
+{
+    std::vector<MyClass> v{
+        { 1, "name1" },
+        { 2, "name2" },
+        { 3, "name3" },
+        { 2, "name2" },
+        { 2, "name2" },
+        { 4, "name4" },
+        { 5, "name5" }
+    };
+
+    int result = std::count_if(v.cbegin(), v.cend(), [](const MyClass& mc) -> bool {
+        return mc.id == 1 && mc.name == "name1";
+    });
+
+    std::cout << "count = " << result << std::endl;
+}
+
+} // namespace S25
+
+
+
+namespace SO26 { // ------------------------------------ ranges::count (считает количество элементов по эталону)
+
+void test()
+{
+    std::vector<MyClass> v{
+        { 1, "name1" },
+        { 2, "name2" },
+        { 3, "name3" },
+        { 2, "name2" },
+        { 2, "name2" },
+        { 4, "name4" },
+        { 5, "name5" }
+    };
+
+    int result = std::ranges::count(v, MyClass{ 2, "name2" });
+
+    std::cout << "count = " << result << std::endl;
+}
+
+} // namespace S26
+
+
+
+namespace SO27 { // ------------------------------------ ranges::count_if (считает количество элементов по условию)
+
+void test()
+{
+    std::vector<MyClass> v{
+        { 1, "name1" },
+        { 2, "name2" },
+        { 3, "name3" },
+        { 2, "name2" },
+        { 2, "name2" },
+        { 4, "name4" },
+        { 5, "name5" }
+    };
+
+    int result = std::ranges::count_if(v, [](const MyClass& mc) -> bool {
+        return mc.id == 1 && mc.name == "name1";
+    });
+
+    std::cout << "count = " << result << std::endl;
+}
+
+} // namespace S27
+
+
+
+namespace SO28 { // ------------------------------------ mismatch (ищет первое несовпадение двух диапазонов)
+
+void test()
+{
+    std::vector<MyClass> v1{
+        { 1, "name1" },
+        { 2, "name2" },
+        { 3, "name3" },
+        { 4, "name4" },
+        { 5, "name5" }
+    };
+
+    std::vector<MyClass> v2{
+        { 1, "name1" },
+        { 2, "name2" },
+        { 2, "name2" },
+        { 4, "name4" },
+        { 5, "name5" }
+    };
+
+    auto [it1, it2] = std::mismatch(v1.begin(), v1.end(), v2.begin(), v2.end());
+
+    if (it1 != v1.end() && it2 != v2.end())
+    {
+        std::cout << "Ok" << std::endl;
+        std::cout << "1 = { id: " << it1->id << ", name: " << it1->name << " }" << std::endl;
+        std::cout << "2 = { id: " << it2->id << ", name: " << it2->name << " }" << std::endl;
+    }
+    else
+    {
+        std::cout << "Error" << std::endl;
+    }
+}
+
+} // namespace S28
+
+
+
+namespace SO29 { // ------------------------------------ ranges::mismatch (ищет первое несовпадение двух диапазонов)
+
+void test()
+{
+    std::vector<MyClass> v1{
+        { 1, "name1" },
+        { 2, "name2" },
+        { 3, "name3" },
+        { 4, "name4" },
+        { 5, "name5" }
+    };
+
+    std::vector<MyClass> v2{
+        { 1, "name1" },
+        { 2, "name2" },
+        { 2, "name2" },
+        { 4, "name4" },
+        { 5, "name5" }
+    };
+
+    auto [it1, it2] = std::ranges::mismatch(v1, v2);
+
+    if (it1 != v1.end() && it2 != v2.end())
+    {
+        std::cout << "Ok" << std::endl;
+        std::cout << "1 = { id: " << it1->id << ", name: " << it1->name << " }" << std::endl;
+        std::cout << "2 = { id: " << it2->id << ", name: " << it2->name << " }" << std::endl;
+    }
+    else
+    {
+        std::cout << "Error" << std::endl;
+    }
+}
+
+} // namespace S29
+
+
+
+namespace SO30 { // ------------------------------------ equal (сравнивает диапазоны)
+
+void test()
+{
+    std::vector<MyClass> v1{
+        { 1, "name1" },
+        { 2, "name2" },
+        { 3, "name3" },
+        { 4, "name4" },
+        { 5, "name5" }
+    };
+
+    std::vector<MyClass> v2{
+        { 1, "name1" },
+        { 2, "name2" },
+        { 2, "name2" },
+        { 4, "name4" },
+        { 5, "name5" }
+    };
+
+    bool result = std::equal(v1.begin(), v1.end(), v2.begin(), v2.end());
+
+    std::cout << "std::equal = " << std::boolalpha << result << std::endl;
+}
+
+} // namespace S30
+
+
+
+namespace SO31 { // ------------------------------------ ranges::equal (сравнивает диапазоны)
+
+void test()
+{
+    std::vector<MyClass> v1{
+        { 1, "name1" },
+        { 2, "name2" },
+        { 3, "name3" },
+        { 4, "name4" },
+        { 5, "name5" }
+    };
+
+    std::vector<MyClass> v2{
+        { 1, "name1" },
+        { 2, "name2" },
+        { 2, "name2" },
+        { 4, "name4" },
+        { 5, "name5" }
+    };
+
+    bool result = std::ranges::equal(v1.begin(), v1.end(), v2.begin(), v2.end());
+
+    std::cout << "std::ranges::equal = " << std::boolalpha << result << std::endl;
+}
+
+} // namespace S31
+
+
+
+namespace SO32 { // ------------------------------------ search (ищет первое вхождение поддиапазона в диапазоне)
+
+void test()
+{
+    std::string str = "0qwerty123qwerty456qwerty789";
+    std::string qwerty = "qwerty";
+
+    auto it = std::search(str.begin(), str.end(), qwerty.begin(), qwerty.end());
+
+    if (it != str.end())
+    {
+        std::cout << "Ok" << std::endl;
+        std::cout << "it = " << *it << std::endl;
+    }
+    else
+    {
+        std::cout << "Error" << std::endl;
+    }
+}
+
+} // namespace S32
+
+
+
+namespace SO33 { // ------------------------------------ search (ищет первое вхождение поддиапазона в диапазоне)
+
+void test()
+{
+    std::string str = "0qwerty123qwerty456qwerty789";
+    std::string qwerty = "qwerty";
+
+    auto it = std::ranges::search(str, qwerty);
+
+    int id = std::ranges::distance(str.begin(), it.begin());
+
+    if (id != str.size())
+    {
+        std::cout << "Ok" << std::endl;
+        std::cout << "id = " << id << std::endl;
+    }
+    else
+    {
+        std::cout << "Error" << std::endl;
+    }
+}
+
+} // namespace S33
 
 } // namespace Example2
