@@ -11,11 +11,22 @@
 namespace Example1
 {
 
-#define SWITCH(str)  switch(s_s::str_hash_for_switch(str))
-#define CASE(str)    static_assert(s_s::str_is_correct(str) && (s_s::str_len(str) <= s_s::MAX_LEN),\
-"CASE string contains wrong characters, or its length is greater than 9");\
-case s_s::str_hash(str, s_s::str_len(str))
-#define DEFAULT  default
+#ifndef SWITCH
+#define SWITCH(str) \
+    switch(s_s::str_hash_for_switch(str))
+#endif
+
+#ifndef CASE
+#define CASE(str) \
+    static_assert(s_s::str_is_correct(str) && (s_s::str_len(str) <= s_s::MAX_LEN),\
+    "CASE string contains wrong characters, or its length is greater than 9");\
+    case s_s::str_hash(str, s_s::str_len(str))
+#endif
+
+#ifndef DEFAULT
+#define DEFAULT \
+    default
+#endif
 
 namespace s_s
 {
@@ -60,9 +71,6 @@ void test()
 {
     std::string month = "january";
     std::string days;
-
-    std::cout << "Enter month name: ";
-    std::cin  >> month;
 
     SWITCH (month)
     {

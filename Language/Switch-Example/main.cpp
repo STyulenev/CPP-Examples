@@ -1,5 +1,5 @@
 #include "Example1.h"
-
+#include "Example2.h"
 
 /*
  * switch — это оператор выбора, который позволяет выполнить один из нескольких блоков кода в зависимости от значения выражения. Он удобен,
@@ -8,8 +8,16 @@
 
 int main()
 {
-    Example1::test();
+    {
+        //Example1::test();
+    }
 
+    {
+        //Example2::test1();
+        //Example2::test2();
+        //Example2::test3();
+        //Example2::test4();
+    }
 
     return 0;
 }
