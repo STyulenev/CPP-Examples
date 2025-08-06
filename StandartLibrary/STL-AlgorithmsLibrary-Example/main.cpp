@@ -1,6 +1,7 @@
 #include "Example1.h"
 #include "Example2.h"
 #include "Example3.h"
+#include "Example4.h"
 
 #include "Other.h"
 
@@ -56,6 +57,19 @@ int main()
         //Example3::FO4::test();
         //Example3::FO5::test();
         //Example3::FO6::test();
+    }
+
+    {
+        //Example4::CO1::test();
+        //Example4::CO2::test();
+        //Example4::CO3::test();
+        //Example4::CO4::test();
+        //Example4::CO5::test();
+        //Example4::CO6::test();
+        //Example4::CO7::test();
+        //Example4::CO8::test();
+        //Example4::CO9::test();
+        //Example4::CO10::test();
     }
 
     {

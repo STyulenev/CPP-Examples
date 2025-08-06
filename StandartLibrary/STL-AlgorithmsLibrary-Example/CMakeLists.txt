@@ -15,4 +15,5 @@ set(PROJECT_SOURCES
     Other.h
 )
 
-add_executable(${PROJECT_NAME} ${PROJECT_SOURCES})
+add_executable(${PROJECT_NAME} ${PROJECT_SOURCES}
+    Example4.h)
