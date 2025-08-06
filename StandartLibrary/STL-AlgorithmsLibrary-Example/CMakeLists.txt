@@ -11,9 +11,11 @@ set(PROJECT_SOURCES
     Example1.h
     Example2.h
     Example3.h
+    Example4.h
+    Example5.h
+    Example6.h
 
     Other.h
 )
 
-add_executable(${PROJECT_NAME} ${PROJECT_SOURCES}
-    Example4.h)
+add_executable(${PROJECT_NAME} ${PROJECT_SOURCES})

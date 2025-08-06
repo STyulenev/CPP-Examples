@@ -25,7 +25,6 @@ struct MyClass
     std::string name;
 };
 
-
 namespace BO1 { // ------------------------------------ for_each (для всех)
 
 void test()

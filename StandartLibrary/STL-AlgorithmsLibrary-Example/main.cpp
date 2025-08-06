@@ -2,6 +2,8 @@
 #include "Example2.h"
 #include "Example3.h"
 #include "Example4.h"
+#include "Example5.h"
+#include "Example6.h"
 
 #include "Other.h"
 
@@ -73,7 +75,26 @@ int main()
     }
 
     {
+        //Example5::SO1::test();
+        //Example5::SO2::test();
+        //Example5::SO3::test();
+        //Example5::SO4::test();
+    }
+
+    {
+        //Example6::TO1::test();
+        //Example6::TO2::test();
+        //Example6::TO3::test();
+        //Example6::TO4::test();
+        //Example6::TO5::test();
+        //Example6::TO6::test();
+        //Example6::TO7::test();
+        //Example6::TO8::test();
+    }
+
+    {
         //Other::EX1::test();
+        //Other::EX2::test();
     }
 
     return 0;
