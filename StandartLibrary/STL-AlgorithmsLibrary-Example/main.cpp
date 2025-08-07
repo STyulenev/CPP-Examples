@@ -4,6 +4,8 @@
 #include "Example4.h"
 #include "Example5.h"
 #include "Example6.h"
+#include "Example7.h"
+#include "Example8.h"
 
 #include "Other.h"
 
@@ -90,6 +92,32 @@ int main()
         //Example6::TO6::test();
         //Example6::TO7::test();
         //Example6::TO8::test();
+    }
+
+    {
+        //Example7::GO1::test();
+        //Example7::GO2::test();
+        //Example7::GO3::test();
+        //Example7::GO4::test();
+        //Example7::GO5::test();
+        //Example7::GO6::test();
+        //Example7::GO7::test();
+        //Example7::GO8::test();
+    }
+
+    {
+        //Example8::RO1::test();
+        //Example8::RO2::test();
+        //Example8::RO3::test();
+        //Example8::RO4::test();
+        //Example8::RO5::test();
+        //Example8::RO6::test();
+        //Example8::RO7::test();
+        //Example8::RO8::test();
+        //Example8::RO9::test();
+        //Example8::RO10::test();
+        //Example8::RO11::test();
+        //Example8::RO12::test();
     }
 
     {
