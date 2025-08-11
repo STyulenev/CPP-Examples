@@ -16,6 +16,8 @@ set(PROJECT_SOURCES
     Example6.h
     Example7.h
     Example8.h
+    Example9.h
+    Example10.h
 
     Other.h
 )

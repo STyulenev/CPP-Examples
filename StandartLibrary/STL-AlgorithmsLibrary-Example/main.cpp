@@ -6,6 +6,8 @@
 #include "Example6.h"
 #include "Example7.h"
 #include "Example8.h"
+#include "Example9.h"
+#include "Example10.h"
 
 #include "Other.h"
 
@@ -118,6 +120,35 @@ int main()
         //Example8::RO10::test();
         //Example8::RO11::test();
         //Example8::RO12::test();
+    }
+
+    {
+        //Example9::OCP1::test();
+        //Example9::OCP2::test();
+        //Example9::OCP3::test();
+        //Example9::OCP4::test();
+        //Example9::OCP5::test();
+        //Example9::OCP6::test();
+        //Example9::OCP7::test();
+        //Example9::OCP8::test();
+        //Example9::OCP9::test();
+        //Example9::OCP10::test();
+        //Example9::OCP11::test();
+        //Example9::SO1::test();
+        //Example9::SO2::test();
+    }
+
+    {
+        //Example10::PO1::test();
+        //Example10::PO2::test();
+        //Example10::PO3::test();
+        //Example10::PO4::test();
+        //Example10::PO5::test();
+        //Example10::PO6::test();
+        //Example10::PO7::test();
+        //Example10::PO8::test();
+        //Example10::PO9::test();
+        //Example10::PO10::test();
     }
 
     {
