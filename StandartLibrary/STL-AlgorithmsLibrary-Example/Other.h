@@ -12,6 +12,26 @@ struct MyClass
     std::string name;
 };
 
+inline bool operator==(const MyClass& lhs, const MyClass& rhs) {
+    return lhs.id == rhs.id && lhs.name == rhs.name;
+}
+
+inline bool operator>(const MyClass& lhs, const MyClass& rhs) {
+    return lhs.id > rhs.id;
+}
+
+inline bool operator<(const MyClass& lhs, const MyClass& rhs) {
+    return lhs.id < rhs.id;
+}
+
+inline bool operator>=(const MyClass& lhs, const MyClass& rhs) {
+    return lhs.id >= rhs.id;
+}
+
+inline bool operator<=(const MyClass& lhs, const MyClass& rhs) {
+    return lhs.id <= rhs.id;
+}
+
 namespace EX1 {
 
 template<typename IteratorType, typename Lambda>

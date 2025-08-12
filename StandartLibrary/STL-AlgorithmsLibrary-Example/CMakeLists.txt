@@ -18,6 +18,8 @@ set(PROJECT_SOURCES
     Example8.h
     Example9.h
     Example10.h
+    Example11.h
+    Example12.h
 
     Other.h
 )
