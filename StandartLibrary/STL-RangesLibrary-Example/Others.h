@@ -6,7 +6,7 @@
 #include <set>
 #include <vector>
 #include <string>
-
+#include <functional>
 
 namespace Others {
 
@@ -223,12 +223,85 @@ void test()
     }
 
     // Выводим результат
-    std::cout << "Отфильтрованные и отсортированные уникальные имена:\n";
+    std::cout << "Filter:\n";
     for (const auto& name : uniqueNames) {
         std::cout << name << "\n";
     }
 }
 
 } // namespace Example_3
+
+
+
+namespace Example_4 { // ----------------------------------- Сортировка + пропуск + взять
+
+struct MyClass {
+    int id;
+    std::string name;
+};
+
+/*inline bool operator==(const MyClass& lhs, const MyClass& rhs) {
+    return lhs.id == rhs.id && lhs.name == rhs.name;
+}*/
+
+/*inline bool operator>(const MyClass& lhs, const MyClass& rhs) {
+    return lhs.id > rhs.id;
+}*/
+
+// less
+inline bool operator<(const MyClass& lhs, const MyClass& rhs) {
+    return lhs.id < rhs.id;
+}
+
+/*
+inline bool operator>=(const MyClass& lhs, const MyClass& rhs) {
+    return lhs.id >= rhs.id;
+}
+
+inline bool operator<=(const MyClass& lhs, const MyClass& rhs) {
+    return lhs.id <= rhs.id;
+}*/
+
+struct sort_less_fn : std::ranges::range_adaptor_closure<sort_less_fn>
+{
+    template<std::ranges::random_access_range R>
+    auto operator()(R&& r) const
+    {
+        std::ranges::sort(r, std::less{});
+        return std::forward<R>(r);
+    }
+
+    template<std::ranges::random_access_range R>
+    friend auto operator|(R&& r, const sort_less_fn& adaptor)
+    {
+        return adaptor(std::forward<R>(r));
+    }
+};
+
+inline constexpr sort_less_fn sort_less;
+
+void test()
+{
+    std::vector<MyClass> v{
+        { 5, "name5" },
+        { 6, "name6" },
+        { 7, "name7" },
+        { 8, "name8" },
+        { 1, "name1" },
+        { 2, "name2" },
+        { 3, "name3" },
+        { 4, "name4" },
+        { 9, "name9" },
+        { 10, "name10" }
+    };
+
+    auto show = [](const MyClass& el) {
+        std::cout << "{ id: " << el.id << ", name: " << el.name << " }" << std::endl;
+    };
+
+    std::ranges::for_each(v | sort_less | std::views::drop(2) | std::views::take(2), show);
+}
+
+} // namespace Example_4
 
 } // namespace Others

@@ -8,6 +8,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(PROJECT_SOURCES
     main.cpp
 
+    Example1.h
+
     Others.h
 )
 
