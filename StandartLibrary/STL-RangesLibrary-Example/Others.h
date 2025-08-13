@@ -304,4 +304,79 @@ void test()
 
 } // namespace Example_4
 
+
+
+
+
+namespace Example_5 { // ----------------------------------- Сортировка + пропуск + взять + попытка типизации
+
+struct MyClass {
+    int id;
+    std::string name;
+};
+
+inline bool operator>(const MyClass& lhs, const MyClass& rhs) {
+    return lhs.id > rhs.id;
+}
+
+inline bool operator<(const MyClass& lhs, const MyClass& rhs) {
+    return lhs.id < rhs.id;
+}
+
+struct threshold_filter_fn : std::ranges::range_adaptor_closure<threshold_filter_fn>
+{
+    int type;
+
+    threshold_filter_fn(int type) : type(type) {}
+
+    template<std::ranges::random_access_range R>
+    auto operator()(R&& r) const
+    {
+        if (type == 1)
+        {
+            std::ranges::sort(r, std::less{});
+        }
+        else
+        {
+            std::ranges::sort(r, std::greater{});
+        }
+
+        return std::forward<R>(r);
+    }
+
+    template<std::ranges::random_access_range R>
+    friend auto operator|(R&& r, const threshold_filter_fn& adaptor)
+    {
+        return adaptor(std::forward<R>(r));
+    }
+};
+
+inline const threshold_filter_fn threshold_filter_less = threshold_filter_fn{1};
+inline const threshold_filter_fn threshold_filter_greater = threshold_filter_fn{2};
+
+void test()
+{
+    std::vector<MyClass> v{
+        { 5, "name5" },
+        { 6, "name6" },
+        { 7, "name7" },
+        { 8, "name8" },
+        { 1, "name1" },
+        { 2, "name2" },
+        { 3, "name3" },
+        { 4, "name4" },
+        { 9, "name9" },
+        { 10, "name10" }
+    };
+
+    auto show = [](const MyClass& el) {
+        std::cout << "{ id: " << el.id << ", name: " << el.name << " }" << std::endl;
+    };
+
+    //auto result = ;
+    std::ranges::for_each(v | threshold_filter_greater /*threshold_filter_less*/, show);
+}
+
+} // namespace Example_5
+
 } // namespace Others
