@@ -9,7 +9,8 @@ set(PROJECT_SOURCE
     main.cpp
 
     Example1.h
+    Example2.h
+    Example3.h
 )
 
-add_executable(${PROJECT_NAME} ${PROJECT_SOURCE}
-    Example2.h)
+add_executable(${PROJECT_NAME} ${PROJECT_SOURCE})

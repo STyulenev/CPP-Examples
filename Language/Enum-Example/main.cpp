@@ -1,5 +1,6 @@
 #include "Example1.h"
 #include "Example2.h"
+#include "Example3.h"
 
 /*
  * Перечисления (enum) используются для объявления набора именованных постоянных величин. Их основное назначение — повысить читаемость
@@ -39,6 +40,13 @@ int main()
     {
         //Example2::test1();
         //Example2::test2();
+    }
+
+    {
+        //Example3::Ex1::test();
+        //Example3::Ex2::test();
+        //Example3::Ex3::test();
+        Example3::Ex4::test();
     }
 
     return 0;
