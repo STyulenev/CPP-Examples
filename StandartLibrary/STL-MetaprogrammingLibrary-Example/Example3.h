@@ -474,9 +474,9 @@ void test()
 
 namespace TP14 { // ------------------------------------ Проверка на класс/структуру с неявным временем жизни (is_implicit_lifetime)
 
-#if __cplusplus >= 202302L // 202003L
+//#if __cplusplus < 202302L // 202003L
 
-struct Base1
+/*struct Base1
 {
     ~Base1() = delete;
 };
@@ -498,16 +498,16 @@ void test()
 
     foo(b1);   // Ок
     //foo(b2); // Ошибка
-}
+}*/
 
-#else
+//#else
 
 void test()
 {
     std::cout << "Unknown standart" << std::endl;
 }
 
-#endif
+//#endif
 
 } // TP14
 

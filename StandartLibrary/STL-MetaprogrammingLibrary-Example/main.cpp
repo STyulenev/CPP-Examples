@@ -130,6 +130,7 @@ int main()
         Other::E16::test();
         Other::E17::test();
         Other::E18::test();
+        Other::E19::test();
     }
 
     // Ratio

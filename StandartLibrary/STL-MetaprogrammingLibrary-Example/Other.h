@@ -1,5 +1,7 @@
 #pragma once
 
+#include <algorithm>
+
 #include <type_traits>
 #include <iostream>
 
@@ -502,11 +504,11 @@ void test()
 {
     short int a = 5;
 
-    //foo(5);  // Ошибка, int = 4
-    foo(12.1); // Ok, double = 8
-    foo(5UL);  // Ok, unsigned long = 8
-    foo(5UL);  // Ok, unsigned long = 8
-    foo(a);    // Ok, short int = 2
+    //foo(5);   // Ошибка, int = 4
+    foo(12.1);  // Ok, double = 8
+    foo(5ULL);  // Ok, unsigned long long = 8
+    //foo(5UL); // Ошибка, unsigned long не на всех ОС 8
+    foo(a);     // Ok, short int = 2
 }
 
 } // E12
@@ -744,5 +746,90 @@ void test()
 }
 
 } // E18
+
+
+
+namespace E19 { // ------------------------------------ Пример проверки численных переменных и действий над ними
+
+template <typename T>
+concept Numeric = requires(T a, T b) {
+    { a + b } -> std::convertible_to<T>;
+    { a - b } -> std::convertible_to<T>;
+    { a * b } -> std::convertible_to<T>;
+    { a / b } -> std::convertible_to<T>;
+    { -a } -> std::convertible_to<T>;
+    requires !std::is_same_v<T, bool>; // Исключаем bool
+};
+
+template <class T> requires Numeric<T>
+void foo(T a, T b)
+{}
+
+void test()
+{
+    foo(1, 2);          // Ок
+    foo(1.1, 2.1);      // Ок
+    //foo(true, false); // Ошибка
+    //foo(1, 2.2);      // Ошибка
+}
+
+} // E19
+
+
+
+namespace E20 { // ------------------------------------ Пример проверки enum класса
+
+class Base1;
+class Base2;
+
+template<typename T>
+concept ValidClasses = (
+    std::same_as<T, Base1> ||
+    std::same_as<T, Base2>
+    );
+
+struct Base1
+{
+    enum eEnum
+    {
+        A,
+        B
+    };
+};
+
+struct Base2
+{
+    enum eEnum
+    {
+        C,
+        D
+    };
+};
+
+struct Base3
+{
+};
+
+// Для MSVC не нужен typename
+// Для GCC ошибка, typename обязателен
+template<ValidClasses T>
+void foo(const typename T::eEnum a) noexcept
+{
+
+}
+
+void test()
+{
+    //foo(Base1::eEnum::A);  // Ок для MSVC
+    //foo(Base2::eEnum::C);  // Ок для MSVC
+
+    foo<Base1>(Base1::eEnum::A); // Ок для GCC
+    foo<Base2>(Base2::eEnum::C); // Ок для GCC
+
+    //foo<Base2>(5); // Ошибка, обязательно enum
+    //foo(5);        // Ошибка, обязательно enum
+}
+
+} // E20
 
 } // namespace Other
