@@ -1,0 +1,52 @@
+#include <iostream>
+#include <utility>
+
+/*
+ * Perfect Forwarding (прямая передача) — идиоматический механизм передачи параметров-ссылок из одной функции в другую с сохранением
+ * константности (временная/обычная/константная) в шаблонах языка C++. Он был стандартизирован в редакции стандарта C++11 с помощью функциональности
+ * библиотеки STL и синтаксиса передаваемыx ссылок (англ. forwarding references), а также унифицирован для применения совместно с вариативными
+ * шаблонами. Прямая передача используется в тех случаях, когда от функций и процедур обобщённого кода требуется оставлять неизменными фундаментальные
+ * свойства своих параметризованных аргументов, то есть:
+ * - константный объект должен передаваться по константной ссылке,
+ * - модифицируемый объект — по обычной,
+ * - временный — по временной ссылке.
+ */
+
+void process(int& x)
+{
+    std::cout << "Lvalue: " << x << std::endl;
+}
+
+void process(int&& x)
+{
+    std::cout << "Rvalue: " << x << std::endl;
+}
+
+void process(const int& x)
+{
+    std::cout << "const Lvalue: " << x << std::endl;
+}
+
+void process(const int&& x)
+{
+    std::cout << "const Rvalue: " << x << std::endl;
+}
+
+template<typename T>
+void forwarder(T&& arg)
+{
+    process(std::forward<T>(arg));
+}
+
+int main()
+{
+    int a = 42;
+    const int c_a = 42;
+
+    forwarder(a);   // Передаем lvalue
+    forwarder(c_a); // Передаем const lvalue
+    forwarder(100); // Передаем rvalue
+    forwarder(static_cast<const int&&>(44)); // const Передаем rvalue
+
+    return 0;
+}
