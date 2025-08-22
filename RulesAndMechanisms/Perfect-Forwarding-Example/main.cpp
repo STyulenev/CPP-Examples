@@ -1,5 +1,5 @@
-#include <iostream>
-#include <utility>
+#include "Example1.h"
+#include "Example2.h"
 
 /*
  * Perfect Forwarding (прямая передача) — идиоматический механизм передачи параметров-ссылок из одной функции в другую с сохранением
@@ -12,41 +12,10 @@
  * - временный — по временной ссылке.
  */
 
-void process(int& x)
-{
-    std::cout << "Lvalue: " << x << std::endl;
-}
-
-void process(int&& x)
-{
-    std::cout << "Rvalue: " << x << std::endl;
-}
-
-void process(const int& x)
-{
-    std::cout << "const Lvalue: " << x << std::endl;
-}
-
-void process(const int&& x)
-{
-    std::cout << "const Rvalue: " << x << std::endl;
-}
-
-template<typename T>
-void forwarder(T&& arg)
-{
-    process(std::forward<T>(arg));
-}
-
 int main()
 {
-    int a = 42;
-    const int c_a = 42;
-
-    forwarder(a);   // Передаем lvalue
-    forwarder(c_a); // Передаем const lvalue
-    forwarder(100); // Передаем rvalue
-    forwarder(static_cast<const int&&>(44)); // const Передаем rvalue
+    Example1::test();
+    Example2::test();
 
     return 0;
 }
