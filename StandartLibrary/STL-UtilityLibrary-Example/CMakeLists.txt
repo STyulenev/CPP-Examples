@@ -12,7 +12,7 @@ set(PROJECT_SOURCES
 
     # Bitset
     # Bit manipulation (since C++20)
-    # Function objects (since C++11)
+    Example4.h # Function objects (since C++11)
     # Hash support (since C++11)
 )
 

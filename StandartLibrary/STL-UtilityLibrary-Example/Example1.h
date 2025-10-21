@@ -462,6 +462,7 @@ struct PrintVariant {
     void operator()(const int n) { std::cout << "variant value = " << n << std::endl; }
     void operator()(const std::string& str) { std::cout << "variant value = " << str << std::endl; }
     void operator()(const bool status) { std::cout << std::boolalpha << "variant value = " << status << std::endl; }
+    void operator()(const std::monostate& other) { std::cout << "other" << std::endl; }
 };
 
 void test()
@@ -494,7 +495,9 @@ void test()
     }
 
     { // std::visit
-        std::variant<int, std::string, bool> variant;
+        std::variant<int, std::string, bool, std::monostate> variant = std::monostate();
+
+        std::visit(PrintVariant{}, variant);
 
         variant = true;
         std::visit(PrintVariant{}, variant);

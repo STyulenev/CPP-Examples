@@ -1,4 +1,5 @@
 #include "Example1.h"
+#include "Example4.h"
 
 int main()
 {
@@ -6,7 +7,7 @@ int main()
         //Example1::GPU1_1::test();
         //Example1::GPU1_2::test();
 
-        Example1::GPU2_6::test();
+        //Example1::GPU2_6::test();
 
         //Example1::GPU6_1::test();
         //Example1::GPU6_2::test();
@@ -16,6 +17,10 @@ int main()
         //Example1::GPU7_2::test();
         //Example1::GPU7_3::test();
         //Example1::GPU7_4::test();
+    }
+
+    {
+        Example4::PFA::test();
     }
 
     return 0;
