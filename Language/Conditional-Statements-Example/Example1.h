@@ -78,4 +78,17 @@ void test3()
     }
 }
 
+// Дополнительное вычисление внутри if
+void test4()
+{
+    auto status = []() -> bool {
+        return 5;
+    };
+
+    if (auto result = status(); result % 2 == 0)
+    {
+        // ...
+    }
+}
+
 } // namespace Example1
