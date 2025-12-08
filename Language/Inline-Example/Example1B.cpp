@@ -9,6 +9,8 @@ void test2()
     std::cout << "1 + 2 = " << add(1, 2) << std::endl;
     std::cout << "1 or 2 = " << findMax<int>(1, 2) << std::endl;
     std::cout << "PI = " << PI << std::endl;
+    //std::cout << "value1 = " << value1 << std::endl;
+    std::cout << "value2 = " << value2 << std::endl;
 }
 
 } // namespace Example1

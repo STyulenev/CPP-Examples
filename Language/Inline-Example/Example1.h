@@ -2,6 +2,9 @@
 
 #include <iostream>
 
+///*const*/int value1 = 42;        // Каждая единица трансляции получит свою копию, будет ошибка
+inline /*const*/ int value2 = 42;  // Одно определение на всю программу
+
 // Избежали многократного определения в Example1A.cpp и Example1B.cpp
 inline int add(int a, int b) {
     return a + b;
