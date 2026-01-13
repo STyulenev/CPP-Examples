@@ -3,6 +3,7 @@
 #include "Example3.h"
 #include "Example4.h"
 #include "Example5.h"
+#include "Example6.h"
 
 /*
  * Объединение (union) в C++ представляет собой структуру данных, позволяющую хранить разные типы данных в одной переменной, занимающей
@@ -16,7 +17,8 @@ int main()
     //Example2::test();
     //Example3::test();
     //Example4::test();
-    Example5::test();
+    //Example5::test();
+    Example6::test();
 
     return 0;
 }

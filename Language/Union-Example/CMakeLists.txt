@@ -13,6 +13,7 @@ set(PROJECT_SOURCE
     Example3.h
     Example4.h
     Example5.h
+    Example6.h
 )
 
 add_executable(${PROJECT_NAME} ${PROJECT_SOURCE})
