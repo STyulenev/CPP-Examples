@@ -2,6 +2,7 @@
 #include "Example5.h"
 #include "Example7.h"
 #include "Example10.h"
+#include "Other.h"
 
 int main()
 {
@@ -17,7 +18,7 @@ int main()
     {
         //Example5::MX1::test();
         //Example5::MX2::test();
-        Example5::MX3::test();
+        //Example5::MX3::test();
 
 
         //Example5::CO::test();
@@ -34,6 +35,13 @@ int main()
         //Example10::F3::test();
         //Example10::F4::test();
         //Example10::F5::test();
+    }
+
+    {
+        //Other::Ex1::test();
+        //Other::Ex2::test();
+        //Other::Ex3::test();
+        Other::Ex4::test();
     }
 
     return 0;

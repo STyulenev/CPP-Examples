@@ -12,6 +12,8 @@ set(PROJECT_SOURCES
     Example5.h  # Mutual exclusion
     Example7.h  # Condition variables
     Example10.h # Futures
+
+    Other.h
 )
 
 add_executable(${PROJECT_NAME} ${PROJECT_SOURCES})
