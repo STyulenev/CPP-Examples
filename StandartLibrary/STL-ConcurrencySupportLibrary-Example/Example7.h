@@ -3,7 +3,7 @@
 #include <condition_variable>
 #include <iostream>
 #include <mutex>
-#include <shared_mutex>
+#include <queue>
 #include <thread>
 
 /*
@@ -70,6 +70,84 @@ void test()
 
 } // namespace CV1
 
+
+
+namespace CV1_1 { // ------------------------------------ condition_variable
+
+std::queue<int> data_queue;
+std::mutex queue_mutex;
+std::condition_variable queue_cv;
+bool production_complete = false;
+
+void producer(int items_count) {
+    for (int i = 0; i < items_count; ++i) {
+        {
+            std::lock_guard<std::mutex> lock(queue_mutex);
+            data_queue.push(i);
+            std::cout << "Producer: added element " << i << std::endl;
+        }
+        queue_cv.notify_one();  // Уведомляем одного потребителя
+        std::this_thread::sleep_for(std::chrono::milliseconds(100));
+    }
+
+    {
+        std::lock_guard<std::mutex> lock(queue_mutex);
+        production_complete = true;
+        std::cout << "Producer: finish work" << std::endl;
+    }
+    queue_cv.notify_all();  // Уведомляем всех потребителей
+}
+
+void consumer(int consumer_id) {
+    while (true) {
+        std::unique_lock<std::mutex> lock(queue_mutex);
+
+        // Ждем, пока появятся данные или производство завершится
+        queue_cv.wait(lock, []() {
+            return !data_queue.empty() || production_complete;
+        });
+
+        // Если очередь пуста и производство завершено - выходим
+        if (data_queue.empty() && production_complete) {
+            std::cout << "Consumer " << consumer_id << ": finish work" << std::endl;
+            break;
+        }
+
+        // Берем данные из очереди
+        if (!data_queue.empty()) {
+            int item = data_queue.front();
+            data_queue.pop();
+            lock.unlock();  // Освобождаем мьютекс раньше
+
+            // Обрабатываем элемент
+            std::cout << "Consumer " << consumer_id << ": processed element " << item << std::endl;
+            std::this_thread::sleep_for(std::chrono::milliseconds(150));
+        }
+    }
+}
+
+void test()
+{
+    const int items_count = 10;
+    const int consumers_count = 3;
+
+    std::thread prod(producer, items_count);
+    std::vector<std::thread> consumers;
+
+    for (int i = 0; i < consumers_count; ++i) {
+        consumers.emplace_back(consumer, i + 1);
+    }
+
+    prod.join();
+
+    for (auto& t : consumers) {
+        t.join();
+    }
+
+    std::cout << "End" << std::endl;
+}
+
+} // namespace CV1_1
 
 namespace CV2 { // ------------------------------------ condition_variable_any
 

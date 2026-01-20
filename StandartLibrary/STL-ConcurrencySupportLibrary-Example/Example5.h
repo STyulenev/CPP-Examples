@@ -2,12 +2,13 @@
 
 #include <iostream>
 #include <mutex>
+#include <shared_mutex>
 #include <thread>
+#include <vector>
 
 /*
  * =======================================================================================================================================================================
- *                                                                           Mutual
- * exclusion
+ *                                                                           Mutual exclusion
  * =======================================================================================================================================================================
  *
  * Mutual exclusion:
@@ -167,6 +168,144 @@ void test()
 }
 
 } // namespace MX3
+
+
+
+namespace MX4 { // ------------------------------------ recursive_timed_mutex
+
+std::recursive_timed_mutex rtm;
+int shared_resource = 0;
+
+void recursive_function(int depth, int thread_id)
+{
+    if (depth <= 0) return;
+
+    // Пытаемся захватить мьютекс на 100 мс
+    std::cout << "Thread " << thread_id << ": try to lock mutex (depth " << depth << ")..." << std::endl;
+
+    if (rtm.try_lock_for(std::chrono::milliseconds(100)))
+    {
+        std::cout << "Thread " << thread_id << ": mutes was captured (depth " << depth << ")" << std::endl;
+
+        ++shared_resource;
+        std::this_thread::sleep_for(std::chrono::milliseconds(50));
+
+        // Рекурсивный вызов
+        recursive_function(depth - 1, thread_id);
+
+        rtm.unlock();
+        std::cout << "Thread " << thread_id << ": mutex was free (depth " << depth << ")" << std::endl;
+    }
+    else
+    {
+        std::cout << "Thread " << thread_id << ": mutes wasn't captured on 100ms (depth " << depth << ")" << std::endl;
+    }
+}
+
+void test()
+{
+    std::thread t1(recursive_function, 3, 1);
+    std::thread t2(recursive_function, 2, 2);
+
+    t1.join();
+    t2.join();
+
+    std::cout << "\nResult: " << shared_resource << std::endl;
+}
+
+} // namespace MX4
+
+
+
+namespace MX5 { // ------------------------------------ shared_mutex
+
+/*
+ * std::shared_mutex позволяет реализовать паттерн "множество читателей/один писатель" (multiple readers/single writer)
+ *
+ * - Если один поток получил эксклюзивную блокировку (через lock , try_lock), то никакие другие потоки не могут получить эту
+ * блокировку (включая разделяемую).
+ * - Если один поток получил разделяемую блокировку (через lock_shared , try_lock_shared), то ни один другой поток не может
+ * получить эксклюзивную блокировку, но может получить разделяемую блокировку.
+ * - Только когда эксклюзивная блокировка не была получена ни одним потоком, разделяемая блокировка может быть получена
+ * несколькими потоками.
+ *
+ */
+
+class ThreadSafeData {
+private:
+    std::shared_mutex mutex_;
+    int data_ = 0;
+
+public:
+    // Чтение данных (множество потоков может читать одновременно)
+    int read() {
+        std::shared_lock lock(mutex_);  // Разделяемая блокировка
+        // Имитация длительного чтения
+        std::this_thread::sleep_for(std::chrono::milliseconds(10));
+        return data_;
+    }
+
+    // Запись данных (только один поток может писать)
+    void write(int value) {
+        std::unique_lock lock(mutex_);  // Эксклюзивная блокировка
+        // Имитация длительной записи
+        std::this_thread::sleep_for(std::chrono::milliseconds(50));
+        data_ = value;
+        std::cout << "New value: " << value << std::endl;
+    }
+
+    // Инкремент (также требует эксклюзивной блокировки)
+    void increment() {
+        std::unique_lock lock(mutex_);
+        ++data_;
+        std::cout << "Increment, new value: " << data_ << std::endl;
+    }
+};
+
+void reader(ThreadSafeData& data, int reader_id) {
+    for (int i = 0; i < 3; ++i) {
+        int value = data.read();
+        std::cout << "Reader " << reader_id << ": read data "
+                  << value << std::endl;
+        std::this_thread::sleep_for(std::chrono::milliseconds(20));
+    }
+}
+
+void writer(ThreadSafeData& data, int writer_id, int start_value) {
+    for (int i = 0; i < 2; ++i) {
+        data.write(start_value + i);
+        std::cout << "Writer " << writer_id << ": write data " << std::endl;
+        std::this_thread::sleep_for(std::chrono::milliseconds(100));
+    }
+}
+
+void test()
+{
+    ThreadSafeData data;
+    std::vector<std::thread> threads;
+
+    // Создаем читателей
+    for (int i = 1; i <= 5; ++i) {
+        threads.emplace_back(reader, std::ref(data), i);
+    }
+
+    // Создаем писателей
+    for (int i = 1; i <= 2; ++i) {
+        threads.emplace_back(writer, std::ref(data), i, i * 100);
+    }
+
+    // Добавляем еще читателей
+    for (int i = 6; i <= 8; ++i) {
+        threads.emplace_back(reader, std::ref(data), i);
+    }
+
+    // Ждем завершения всех потоков
+    for (auto& t : threads) {
+        t.join();
+    }
+}
+
+} // namespace MX5
 
 
 

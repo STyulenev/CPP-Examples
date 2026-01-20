@@ -19,13 +19,15 @@ int main()
         //Example5::MX1::test();
         //Example5::MX2::test();
         //Example5::MX3::test();
-
+        //Example5::MX4::test();
+        //Example5::MX5::test();
 
         //Example5::CO::test();
     }
 
     {
         //Example7::CV1::test();
+        Example7::CV1_1::test();
         //Example7::CV2::test();
     }
 
@@ -41,7 +43,7 @@ int main()
         //Other::Ex1::test();
         //Other::Ex2::test();
         //Other::Ex3::test();
-        Other::Ex4::test();
+        //Other::Ex4::test();
     }
 
     return 0;
