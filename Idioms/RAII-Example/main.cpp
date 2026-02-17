@@ -1,5 +1,6 @@
 #include <iostream>
 
+#include "Examples.h"
 #include "RAIIWrapper.h"
 #include "SomeClass.h"
 
@@ -34,6 +35,12 @@ int main()
         RAIIWrapper<SomeClass> someClass;
         someClass.get()->run();
     } // Нет утечки
+
+    std::cout << std::endl;
+
+    {
+        FileGuard tempfile("C:/Work/test.txt");
+    }
 
     return 0;
 }

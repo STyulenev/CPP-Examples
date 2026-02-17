@@ -8,10 +8,10 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(PROJECT_SOURCE
     main.cpp
 
+    Examples.h
+    RAIIWrapper.h
     SomeClass.h
     SomeClass.cpp
-
-    RAIIWrapper.h
 )
 
 add_executable(${PROJECT_NAME} ${PROJECT_SOURCE})
