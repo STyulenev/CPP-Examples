@@ -11,6 +11,8 @@
 #include <map>
 #include <set>
 
+#include <variant>
+
 /*
  * =======================================================================================================================================================================
  *                                                                           Other
@@ -295,7 +297,20 @@ decltype(std::declval<T>().cend())>> : std::true_type
 
 template <typename T, std::enable_if_t<is_container<T>::value, bool> = true>
 void foo(T arg)
-{}
+{
+    // Проверка типа данных в контейнере
+    auto it = arg.begin();
+    using it_value_type = typename std::iterator_traits<decltype(it)>::value_type;
+
+    if constexpr (std::same_as<it_value_type, std::string>)
+    {
+        // ...
+    }
+    else
+    {
+        // ...
+    }
+}
 
 void test()
 {
@@ -831,5 +846,83 @@ void test()
 }
 
 } // E20
+
+
+
+namespace E21 { // ------------------------------------ Пример удобной обёртки для variant + visit (посетитель)
+
+using Data = std::variant<bool, int>;
+
+// Helper template for the overload pattern (C++17/C++20 style)
+template<class... Ts> struct overloaded : Ts... { using Ts::operator()...; };
+template<class... Ts> overloaded(Ts...) -> overloaded<Ts...>;
+
+void func(const Data& data)
+{
+    std::visit(overloaded {
+                   [](const bool data) -> void
+                   {
+                       std::cout << "bool" << std::endl;
+                   },
+
+                   [](const int data) -> void
+                   {
+                       std::cout << "int" << std::endl;
+                   }
+               }, data);
+}
+
+void test()
+{
+    func(true);    // Ок
+    func(10);      // Ок
+    //func("afd"); // Ошибка
+}
+
+} // E21
+
+
+
+namespace E22 { // ------------------------------------ Пример обработки интерируемых и неитерируемых типов
+
+// Проверка наличия вложенного типа iterator
+template<typename T, typename = void>
+struct has_iterator : std::false_type {};
+
+template<typename T>
+struct has_iterator<T, std::void_t<typename T::iterator>> : std::true_type {};
+
+// Функция для типов с итератором
+template<typename T>
+typename std::enable_if<has_iterator<T>::value>::type
+print_begin_end(const T& container)
+{
+    auto it = container.begin();
+    auto end = container.end();
+    if (it != end) {
+        std::cout << "First element: " << *it << std::endl;
+    } else {
+        std::cout << "Container is empty\n";
+    }
+}
+
+// Для типов без итератора
+template<typename T>
+typename std::enable_if<!has_iterator<T>::value>::type
+print_begin_end(const T&)
+{
+    std::cout << "There is no iterator\n";
+}
+
+void test()
+{
+    std::vector<int> v = {1, 2, 3};
+    int x = 10;
+
+    print_begin_end(v); // контейнер с итератором
+    print_begin_end(x); // не контейнер
+}
+
+} // E22
 
 } // namespace Other
