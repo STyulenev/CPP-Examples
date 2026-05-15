@@ -925,4 +925,86 @@ void test()
 
 } // E22
 
+
+
+namespace E23 { // ------------------------------------ Пример разведение между методами через compile-time вычисление типа
+
+enum Policy { FIRST=0, SECOND=1, THIRD=2, UNKNOWN=3 };
+
+// Это способ сделать выбор реализации функции в compile-time, основанный на значении целочисленного шаблона
+template <int N>
+struct Int2Type { enum { value = N }; };
+
+template <typename T, int Policy>
+class SomeClass {
+    // Убираем лишние политики
+    static_assert(Policy == FIRST || Policy == SECOND || Policy == THIRD, "Unknown Policy");
+
+    void DoPush(const T& v, Int2Type<FIRST>) { std::cout << "void DoPush(const T& v, Int2Type<FIRST>)\n"; }
+    void DoPush(const T& v, Int2Type<SECOND>) { std::cout << "void DoPush(const T& v, Int2Type<SECOND>)\n"; }
+    void DoPush(const T& v, Int2Type<THIRD>) { std::cout << "void DoPush(const T& v, Int2Type<THIRD>)\n"; }
+
+public:
+    void Push(const T& v) { DoPush(v, Int2Type<Policy>()); }
+
+    // std::vector<T> ....
+};
+
+void test()
+{
+    SomeClass<int, Policy::FIRST> sc1;
+    sc1.Push(2);
+
+    SomeClass<int, Policy::SECOND> sc2;
+    sc2.Push(2);
+
+    SomeClass<int, Policy::THIRD> sc3;
+    sc3.Push(2);
+
+    //SomeClass<int, Policy::UNKNOWN> sc4;
+}
+
+} // E23
+
+
+
+namespace E24 { // ------------------------------------ Пример фильтрации по enum
+
+enum class Type
+{
+    FIRST=0, SECOND=1, THIRD=2, UNKNOWN=3
+};
+
+template<Type type, typename = std::enable_if_t<
+    type == Type::FIRST ||
+    type == Type::SECOND ||
+    type == Type::THIRD
+>>
+inline std::string getData()
+{
+
+    switch (type)
+    {
+    case Type::FIRST:
+        return "Type::FIRST";
+    case Type::SECOND:
+        return "Type::SECOND";
+    case Type::THIRD:
+        return "Type::THIRD";
+    case Type::UNKNOWN: [[fallthrough]]; // Недостижимый код
+    default:
+        std::terminate();
+    }
+}
+
+void test()
+{
+    std::cout << getData<Type::FIRST>() << "\n";
+    std::cout << getData<Type::SECOND>() << "\n";
+    std::cout << getData<Type::THIRD>() << "\n";
+    //std::cout << getData<Type::UNKNOWN>() << "\n";
+}
+
+} // E24
+
 } // namespace Other

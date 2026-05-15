@@ -134,6 +134,8 @@ int main()
         Other::E20::test();
         Other::E21::test();
         Other::E22::test();
+        Other::E23::test();
+        Other::E24::test();
     }
 
     // Ratio
