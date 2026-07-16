@@ -37,27 +37,53 @@ protected:
 
 };
 
-class Derived : protected Base
+class Derived1 : protected Base
 {
 public:
-    Derived() : Base(5) {
-        std::cout << "Derived::Derived()" << std::endl;
+    Derived1() : Base(5) {
+        std::cout << "Derived1::Derived1()" << std::endl;
     }
 
-    virtual ~Derived() {
-        std::cout << "Derived::~Derived()" << std::endl;
+    virtual ~Derived1() {
+        std::cout << "Derived1::~Derived1()" << std::endl;
     }
 
     virtual void method() {
         Base::method(); // Работает
 
-        std::cout << "Derived::method()" << std::endl;
+        std::cout << "Derived1::method()" << std::endl;
     }
 
     virtual void method1() {
         Base::method1(); // Работает
 
-        std::cout << "Derived::method1()" << std::endl;
+        std::cout << "Derived1::method1()" << std::endl;
+    }
+};
+
+class Derived2 : public Derived1
+{
+public:
+    Derived2() {
+        std::cout << "Derived2::Derived2()" << std::endl;
+    }
+
+    virtual ~Derived2() {
+        std::cout << "Derived2::~Derived2()" << std::endl;
+    }
+
+    virtual void method() {
+        Base::method(); // Работает
+        Derived1::method(); // Работает
+
+        std::cout << "Derived2::method()" << std::endl;
+    }
+
+    virtual void method1() {
+        Base::method1(); // Работает
+        Derived1::method1(); // Работает
+
+        std::cout << "Derived2::method1()" << std::endl;
     }
 };
 
@@ -76,8 +102,21 @@ void test2()
 {
     std::cout << "test2()\n" << std::endl;
 
-    //Base* d = new Derived(); // Ошибка
-    Derived* d = new Derived();
+    //Base* d = new Derived1(); // Ошибка
+    Derived1* d = new Derived1();
+    // Base* b = dynamic_cast<Base*>(d); // Ошибка
+    d->method();
+    d->method1();
+
+    delete d;
+}
+
+void test3()
+{
+    std::cout << "test3()\n" << std::endl;
+
+    //Base* d = new Derived2(); // Ошибка
+    Derived1* d = new Derived2();
     // Base* b = dynamic_cast<Base*>(d); // Ошибка
     d->method();
     d->method1();

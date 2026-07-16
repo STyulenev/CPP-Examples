@@ -28,6 +28,7 @@ int main()
     /*{
         Example3::test1();
         Example3::test2();
+        Example3::test3();
     }*/
 
     /*{
@@ -47,10 +48,10 @@ int main()
         Example6::test4();
     }*/
 
-    /*{
+    {
         Example7::test1();
         Example7::test2();
-    }*/
+    }
 
     /*{
         Example8::test1();
@@ -71,12 +72,12 @@ int main()
         Example10::test3();
     }*/
 
-    {
+    /*{
         Example11::test1();
         Example11::test2();
         Example11::test3();
         Example11::test4();
-    }
+    }*/
 
     return 0;
 }

@@ -11,9 +11,10 @@
  */
 
 int main()
-{ 
+{
     Example1::test();
-    Example2::test();
+    Example2_1::test();
+    Example2_2::test();
     Example3::test();
 
     return 0;
